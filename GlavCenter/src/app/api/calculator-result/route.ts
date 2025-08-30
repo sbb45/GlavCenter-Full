@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
       }
     `;
 
-        const endpoint = 'http://localhost:4000/api/graphql';
+        const endpoint = 'http://localhost:4000/admin/api/graphql';
 
         const data: any = await request(endpoint, mutation, {
             name,

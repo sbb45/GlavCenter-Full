@@ -25,5 +25,13 @@ export default withAuth(
     },
     lists,
     session,
+      graphql: {
+          path: '/admin/api/graphql',   // ⬅ задаём кастомный путь
+          playground: true,             // (опционально) включаем Playground
+      },
+      ui: {
+          basePath: '/admin',           // ⬅ Админка под /admin
+          // можно дополнительно настроить isDisabled, publicPages и др.
+      },
   })
 )
