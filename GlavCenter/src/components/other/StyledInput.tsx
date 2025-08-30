@@ -1,71 +1,83 @@
 import React, {ChangeEvent} from 'react';
 import styled from "styled-components";
-import {bgLightColor, bgSiteColor, textColor, whiteColor} from "@/styles/colors";
+import {bgSiteColor, textColor, whiteColor} from "@/styles/colors";
+import PhoneInput from 'react-phone-number-input';
+import {E164Number} from "libphonenumber-js";
 
 interface IProps {
     placeholder: string;
     value: string;
-    onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    onPhoneChange?: (value: string) => void;
     inputType?: string;
 }
 
-const StyleInput = styled.input`
-    background-color: ${bgSiteColor};
-    color: ${textColor};
-    border: 2px solid rgba(218,219,240,0.50);
-    font-weight: 300;
-    width: 470px;
-    height: 58px;
-    border-radius: 1.5rem;
-    font-size: 20px;
-    padding-left: 30px;
-    transition: background-color .4s ease;
-    &:focus {
-        background-color: ${whiteColor};
+const InputWrapper = styled.div`
+    input, textarea{
+        background-color: ${bgSiteColor};
+        color: ${textColor};
+        border: 2px solid rgba(218,219,240,0.50);
+        font-weight: 300;
+        width: 470px;
+        height: 58px;
+        border-radius: 1.5rem;
+        font-size: 20px;
+        padding: 0 30px;
+        transition: background-color .4s ease;
+        &:focus {
+            background-color: ${whiteColor};
+        }
+        @media (max-width: 1300px) {
+            width: 100%;
+        }
     }
-    @media (max-width: 1300px) {
-        width: 100%;
+    textarea{
+        padding-top: 16px;
+        height: 180px;
+        resize: none;
     }
-`
-const StyleTextarea = styled.textarea`
-    background-color: ${bgSiteColor};
-    color: ${textColor};
-    border: 2px solid rgba(218,219,240,0.50);
-    font-weight: 300;
-    width: 470px;
-    height: 180px;
-    border-radius: 1.5rem;
-    font-size: 20px;
-    padding-top: 16px;
-    padding-left: 30px;
-    transition: background-color .4s ease;
-    resize: none;
-    &:focus {
-        background-color: ${whiteColor};
-    }
-    @media (max-width: 1300px) {
-        width: 100%;
+    .PhoneInputCountry{
+        display: none;
     }
 `
 
-const StyledInput = ({placeholder, value, onChange, inputType}: IProps) => {
 
-    return inputType === 'textarea' ? (
-        <StyleTextarea
-            required
-            placeholder={placeholder}
-            value={value.toString()}
-            onChange={onChange}
-        />
-    ) : (
-        <StyleInput
-            required
-            type={inputType}
-            placeholder={placeholder}
-            value={value.toString()}
-            onChange={onChange}
-        />
-    );
+const StyledInput = ({placeholder, value, onChange, inputType, onPhoneChange}: IProps) => {
+
+    const handlePhoneChange = (phoneValue: E164Number | undefined) => {
+        if (onPhoneChange) {
+            onPhoneChange(phoneValue || '');
+        }
+    };
+
+    return (
+        <InputWrapper>
+            {inputType === 'textarea' ? (
+                <textarea
+                    required
+                    placeholder={placeholder}
+                    value={value.toString()}
+                    onChange={onChange}
+                />
+            ) : inputType==='phone' ? (
+                <PhoneInput
+                    required
+                    value={value}
+                    placeholder={placeholder}
+                    onChange={handlePhoneChange}
+                    defaultCountry="RU"
+                />
+            ) : (
+                <input
+                    required
+                    type={inputType}
+                    placeholder={placeholder}
+                    value={value.toString()}
+                    onChange={onChange}
+                />
+            )}
+        </InputWrapper>
+    )
 };
 
 export default StyledInput;

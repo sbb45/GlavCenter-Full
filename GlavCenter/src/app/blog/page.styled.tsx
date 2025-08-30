@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import {headingColor, primaryColor, textColor, whiteColor} from "@/styles/colors";
+import styled, {keyframes} from "styled-components";
+import {bgLightColor, headingColor, primaryColor, textColor, textGrayColor} from "@/styles/colors";
 import Link from "next/link";
 
 export const BlogContent = styled.div`
@@ -66,4 +66,24 @@ export const Post = styled(Link)`
         color: ${textColor};
         margin: 0 12px 18px;
     }
+`
+
+const spin = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+`;
+export const Spinner = styled.div`
+  border: 12px solid ${bgLightColor};
+  border-top: 12px solid ${primaryColor}; 
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  animation: ${spin} 1s linear infinite;
+  margin-bottom: 16px;
+`;
+export const EmptyBlog = styled.h3`
+    font-size: 24px;
+    text-align: center;
+    margin: 0 auto;
+    color: ${textGrayColor};
 `

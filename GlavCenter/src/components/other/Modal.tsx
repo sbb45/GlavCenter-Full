@@ -71,7 +71,7 @@ const Modal = () => {
         let timer: NodeJS.Timeout | undefined;
         if (isOpen) {
             setIsLoading(true);
-            let rand = 5 + Math.random() * (9 + 1 - 5) * 1000;
+            let rand = Math.floor(Math.random() * (9 - 5 + 1)) + 5;
             timer = setTimeout(() => setIsLoading(false), Math.floor(rand) * 10);
         }
 
@@ -95,8 +95,8 @@ const Modal = () => {
             <ModalContent>
                 <CloseButton onClick={closeModal}>
                     <svg width="35" height="35" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-                        <line x1="15" y1="15" x2="35" y2="35" stroke="#000000" stroke-width="4" stroke-linecap="round" />
-                        <line x1="15" y1="35" x2="35" y2="15" stroke="#000000" stroke-width="4" stroke-linecap="round" />
+                        <line x1="15" y1="15" x2="35" y2="35" stroke="#000000" strokeWidth="4" strokeLinecap="round" />
+                        <line x1="15" y1="35" x2="35" y2="15" stroke="#000000" strokeWidth="4" strokeLinecap="round" />
                     </svg>
                 </CloseButton>
                 {modalContent}

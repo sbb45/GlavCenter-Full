@@ -4,6 +4,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import {ContactContent, ContactForm, ContactMap, ContactWrapper} from "@/app/contacts/page.styled";
 import StyledInput from "@/components/other/StyledInput";
 import SubmitBtn from "@/components/other/SubmitBtn";
+import 'react-phone-number-input/style.css';
 
 
 export default function Contacts() {
@@ -25,7 +26,7 @@ export default function Contacts() {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
 
-        const res = await fetch('/api/create-client', {
+        await fetch('/api/clients/create-client', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -34,8 +35,9 @@ export default function Contacts() {
                 question: question,
             })
         })
-        const data = await res.json()
-        console.log(data)
+        setName('')
+        setPhone('')
+        setQuestion('')
     }
     return (
         <IndexWrapper>
@@ -54,8 +56,9 @@ export default function Contacts() {
                         />
                         <StyledInput
                             placeholder={'Номер телефона'}
+                            inputType={'phone'}
                             value={phone}
-                            onChange={(e)=>setPhone(e.target.value)}
+                            onPhoneChange={setPhone}
                         />
                         <StyledInput
                             placeholder={'Ваш вопрос'}

@@ -50,7 +50,7 @@ const ModalCalculator = ({close}: any) => {
         if (calculatorReq) {
             const { overdue, debt, payment, whoOwes } = JSON.parse(calculatorReq);
 
-            const res =await fetch('/api/calculator-result', {
+            await fetch('/api/clients/calculator-result', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -63,8 +63,9 @@ const ModalCalculator = ({close}: any) => {
 
                 })
             })
-            const data = await res.json()
-            console.log(data)
+            setName('')
+            setPhone('')
+            close()
         }else {
             location.reload()
         }
@@ -87,8 +88,9 @@ const ModalCalculator = ({close}: any) => {
             />
             <StyledInput
                 placeholder={'Номер телефона'}
+                inputType={'phone'}
                 value={phone}
-                onChange={(e)=>setPhone(e.target.value)}
+                onPhoneChange={setPhone}
             />
             <SubmitBtn value={'Отправить заявку'} />
         </ModalForm>
