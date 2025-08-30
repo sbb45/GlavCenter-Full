@@ -67,12 +67,11 @@ const Modal = () => {
     const [isLoading, setIsLoading] = useState(false);
     const { isOpen, closeModal, modalContent } = useModal();
 
-    // TODO: Вернуть косарь
     useEffect(() => {
         let timer: NodeJS.Timeout | undefined;
         if (isOpen) {
             setIsLoading(true);
-            let rand = 5 + Math.random() * (9 + 1 - 5);
+            let rand = 5 + Math.random() * (9 + 1 - 5) * 1000;
             timer = setTimeout(() => setIsLoading(false), Math.floor(rand) * 10);
         }
 
