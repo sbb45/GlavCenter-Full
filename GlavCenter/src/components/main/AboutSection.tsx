@@ -24,6 +24,12 @@ const AboutWrapper = styled.div`
     img{
         border-radius: 4px 4px 120px 4px;
     }
+    @media (max-width: 1500px) {
+        img{
+            width: 400px;
+            height: 400px;
+        }
+    }
     @media (max-width: 950px) {
         flex-direction: column;
         img{
@@ -48,7 +54,8 @@ const AboutTitle = styled.h2`
     line-height: 1;
 `
 const AboutText = styled.p`
-    font-size: 24px;
+    font-size: calc(18px + .4vw);
+    font-weight: 100;
 `
 
 
@@ -65,10 +72,13 @@ const AboutSection: React.FC<StartSectionProps> = ({ content }) => {
                     />
                     <AboutTexts>
                         <AboutTitle>
-                            {content.title}
+                            {content?.title || 'О Главном центре банкротства'}
                         </AboutTitle>
                         <AboutText>
-                            {content.text}
+                            {content?.text || 'Наша главная цель — дать возможность гражданам России. Которые столкнулись ' +
+                                'с финансовыми проблемами и не в состоянии выполнять свои обязательства, ' +
+                                'воспользоваться своим ПРАВОМ списать долги в соответствии с ФЗ «О несостоятельности' +
+                                '(банкротстве)» от 26.10.2002 №127-ФЗ в судебном и неудобном порядке'}
                         </AboutText>
                     </AboutTexts>
                 </AboutWrapper>

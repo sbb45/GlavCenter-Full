@@ -15,8 +15,13 @@ const LogoWrapper = styled.div`
         color: ${headingColor};
     }
     @media (max-width: 560px) {
+        gap: 6px;
         h2{
-            font-size: 24px;
+            font-size: 22px;
+        }
+        img{
+            width: 26px;
+            height: 26px;
         }
     }
 `

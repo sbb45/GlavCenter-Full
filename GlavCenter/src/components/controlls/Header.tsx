@@ -28,6 +28,9 @@ const HeaderWrapper = styled.header<{$isScrolled: boolean}>`
     top: 0;
     left: 0;
     z-index: 99;
+    @media (max-width: 560px) {
+        height: 70px;
+    }
 `
 
 const DesktopLinks = styled.div`

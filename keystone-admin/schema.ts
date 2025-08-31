@@ -192,5 +192,97 @@ export const lists: Lists = {
             createdAt: timestamp({ defaultValue: { kind: 'now' }, label: 'Создано' }),
         },
     }),
+
+    Calculator: list({
+        access: allowAll,
+        ui: {
+            labelField: 'title',
+            description: 'Настройки калькулятора',
+            listView: {
+                initialColumns: ['title', 'isActive', 'createdAt'],
+                initialSort: { field: 'createdAt', direction: 'DESC' },
+            },
+        },
+        fields: {
+            title: text({ validation: { isRequired: true }, label: 'Название конфигурации' }),
+            isActive: select({
+                type: 'enum',
+                options: [
+                    { label: 'Активна', value: 'active' },
+                    { label: 'Неактивна', value: 'inactive' }
+                ],
+                defaultValue: 'inactive',
+                label: 'Статус'
+            }),
+            
+            // Заголовки
+            overdueTitle: text({ 
+                defaultValue: 'Имеются ли просрочки?', 
+                label: 'Заголовок вопроса о просрочках' 
+            }),
+            debtTitle: text({ 
+                defaultValue: 'Сумма долга', 
+                label: 'Заголовок поля суммы долга' 
+            }),
+            paymentTitle: text({ 
+                defaultValue: 'Месячный платёж', 
+                label: 'Заголовок поля месячного платежа' 
+            }),
+            whoOwesTitle: text({ 
+                defaultValue: 'Перед кем долги?', 
+                label: 'Заголовок вопроса о кредиторах' 
+            }),
+            
+            // Максимальные значения для range
+            debtMax: integer({ 
+                defaultValue: 1000000, 
+                label: 'Максимальная сумма долга (в рублях)' 
+            }),
+            paymentMax: integer({ 
+                defaultValue: 40000, 
+                label: 'Максимальный месячный платёж (в рублях)' 
+            }),
+            
+            // Варианты просрочек
+            overdueOptions: json({ 
+                defaultValue: ["<1 месяца", ">1 месяца", ">6 месяцев", ">1 года", "Плачу вовремя"],
+                label: 'Варианты ответов о просрочках (массив строк)' 
+            }),
+            
+            // Варианты кредиторов
+            whoOwesOptions: json({ 
+                defaultValue: ["МФО", "Штрафы", "Налоги", "Банки", "ЖКХ", "Другой вариант"],
+                label: 'Варианты кредиторов (массив строк)' 
+            }),
+            
+            // Тексты кнопок и модального окна
+            submitButtonText: text({ 
+                defaultValue: 'Расчитать стоимость', 
+                label: 'Текст кнопки отправки' 
+            }),
+            modalTitle: text({ 
+                defaultValue: 'Поздравляем!', 
+                label: 'Заголовок модального окна' 
+            }),
+            modalSubtitle: text({ 
+                defaultValue: 'Вы сможете списать свои задолженности по закону', 
+                label: 'Подзаголовок модального окна' 
+            }),
+            modalDescription: text({ 
+                defaultValue: 'Наш специалист расскажет подробности по телефону', 
+                label: 'Описание в модальном окне' 
+            }),
+            modalInstruction: text({ 
+                defaultValue: 'От вас потребуется Номер телефона и Имя', 
+                label: 'Инструкция в модальном окне' 
+            }),
+            modalSubmitText: text({ 
+                defaultValue: 'Отправить заявку', 
+                label: 'Текст кнопки отправки в модальном окне' 
+            }),
+            
+            createdAt: timestamp({ defaultValue: { kind: 'now' }, label: 'Создано' }),
+        },
+    }),
 } satisfies Lists
 

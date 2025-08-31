@@ -91,11 +91,11 @@ const FooterCopyright = styled.p`
 
 
 const Footer = ({ info }: IProps) => {
-    const address = info.address || 'Малышева 51, офис 2408';
-    const schedule = info.schedule || 'пн-пт 10:00-19:00 сб 10:00-15:00';
-    const dayOff = info.dayOff || 'вс выходной';
-    const phone = info.phone || '8 (943) 328-12-15';
-    const copyright = info.copyright || '© 2025 OOO "ГЦБ"';
+    const address = info?.address || 'Малышева 51, офис 2408';
+    const schedule = info?.schedule || 'пн-пт 10:00-19:00 сб 10:00-15:00';
+    const dayOff = info?.dayOff || 'вс выходной';
+    const phone = info?.phone || '8 (943) 328-12-15';
+    const copyright = info?.copyright || '© 2025 OOO "ГЦБ"';
 
     return (
         <FooterWrapper>

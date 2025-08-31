@@ -1,5 +1,5 @@
 'use client'
-import React  from 'react';
+import React from 'react';
 import styled from "styled-components";
 import {headingColor, primaryColor, textColor} from "@/styles/colors";
 import {ContentLeft, ImageRight, Section} from "@/app/page.styled";
@@ -51,7 +51,7 @@ const Cards = styled.div`
         row-gap: 24px;
     }
 
-    
+
 `
 const Card = styled.div`
     display: flex;
@@ -101,14 +101,24 @@ const Card = styled.div`
 `
 
 const StartSection: React.FC<StartSectionProps> = ({ content, services}) => {
+    const title = content?.title || 'БАНКРОТСТВО ФИЗИЧЕСКИХ ЛИЦ';
+
+    // Дефолтные карточки на случай если content.cards отсутствует
+    const defaultCards = [
+        { value: '20К', label: 'Счастливых клиентов' },
+        { value: '10МЛРД', label: 'Списано долгов' },
+        { value: '137', label: 'Офисов по всей стране' }
+    ];
+
+    const cardsToRender = content?.cards?.length ? content.cards : defaultCards;
 
     return (
         <Section>
             <ContentLeft>
-                <Title>{content.title}</Title>
+                <Title>{content?.title || title}</Title>
 
                 <Cards>
-                    {content.cards.map((card, idx) => (
+                    {cardsToRender.map((card, idx) => (
                         <Card key={idx}>
                             <h4>{card.value}</h4>
                             <h3>{card.label}</h3>

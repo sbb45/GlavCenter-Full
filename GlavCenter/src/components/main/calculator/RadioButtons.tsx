@@ -6,7 +6,8 @@ import {primaryColor, textGrayColor} from "@/styles/colors";
 
 interface IProps{
     value: string,
-    setValue: (value: string) => void
+    setValue: (value: string) => void,
+    options?: string[]
 }
 
 const RadioGroup = styled.div`
@@ -21,7 +22,7 @@ const RadioGroup = styled.div`
     row-gap: .5rem;
     margin: 18px 0 12px;
     @media (max-width: 1550px) {
-        width: 24rem;
+        width: 26rem;
     }
     @media (max-width: 1400px) {
         grid-template-columns: repeat(2, 1fr);
@@ -60,11 +61,11 @@ const StyledLabel = styled.label<{ $checked?: boolean }>`
   }
 `;
 
-const RadioButtons = ({value, setValue}: IProps) => {
+const RadioButtons = ({value, setValue, options = ["<1 месяца", ">1 месяца", ">6 месяцев", ">1 года", "Плачу вовремя"]}: IProps) => {
 
     return (
         <RadioGroup>
-            {["<1 месяца", ">1 месяца", ">6 месяцев", ">1 года", "Плачу вовремя"].map((v) => (
+            {options.map((v) => (
                 <div key={v}>
                     <HiddenRadio
                         id={`radio-${v}`}

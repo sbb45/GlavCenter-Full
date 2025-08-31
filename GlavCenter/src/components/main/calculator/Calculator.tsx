@@ -7,6 +7,7 @@ import PriceRange from "@/components/main/calculator/PriceRange";
 import CheckboxBtn from "@/components/main/calculator/CheckboxBtn";
 import SubmitBtn from "@/components/other/SubmitBtn";
 import ModalCalculator from "@/components/main/calculator/ModalCalculator";
+import {useCalculatorConfig} from "@/hooks/useCalculatorConfig";
 
 const WrapperCalculator = styled.form`
     position: absolute;
@@ -64,6 +65,7 @@ const Calculator = () => {
     const [errors, setErrors] = useState<string[]>([]);
 
     const {openModal, closeModal} = useModal();
+    const { config } = useCalculatorConfig();
 
     // Модальное окно
     const handleConfirmModal = async (e: FormEvent) => {
@@ -85,7 +87,7 @@ const Calculator = () => {
         // Отправка
         localStorage.setItem('calculateResult', JSON.stringify({overdue, debt, payment, whoOwes}))
         openModal(
-            <ModalCalculator close={closeModal} />
+            <ModalCalculator close={closeModal} config={config} />
         )
 
     }
@@ -93,34 +95,36 @@ const Calculator = () => {
     return (
         <WrapperCalculator onSubmit={handleConfirmModal}>
             <div className={'blockWrapper'}>
-                <QuestionTitle className={errors.includes('overdue') ? 'err' : ''}>Имеются ли просрочки?</QuestionTitle>
+                <QuestionTitle className={errors.includes('overdue') ? 'err' : ''}>{config.overdueTitle}</QuestionTitle>
                 <RadioButtons
                     value={overdue}
                     setValue={setOverdue}
+                    options={config.overdueOptions}
                 />
             </div>
             <PriceRange
-                title={'Сумма долга'}
-                max={1000000}
+                title={config.debtTitle}
+                max={config.debtMax}
                 isError={errors.includes('debt')}
                 value={debt}
                 setValue={setDebt}
             />
             <PriceRange
-                title={'Месячный платёж'}
-                max={40000}
+                title={config.paymentTitle}
+                max={config.paymentMax}
                 isError={errors.includes('payment')}
                 value={payment}
                 setValue={setPayment}
             />
             <div className={'blockWrapper'}>
-                <QuestionTitle className={errors.includes('whoOwes') ? 'err' : ''}>Перед кем долги?</QuestionTitle>
+                <QuestionTitle className={errors.includes('whoOwes') ? 'err' : ''}>{config.whoOwesTitle}</QuestionTitle>
                 <CheckboxBtn
                     value={whoOwes}
                     setValue={setWhoOwes}
+                    options={config.whoOwesOptions}
                 />
             </div>
-            <SubmitBtn value={'Расчитать стоимость'} />
+            <SubmitBtn value={config.submitButtonText} />
         </WrapperCalculator>
     );
 };

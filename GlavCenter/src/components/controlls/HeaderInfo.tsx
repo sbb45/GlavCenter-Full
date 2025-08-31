@@ -35,8 +35,8 @@ const InfoWrapper = styled.div`
 `
 
 const HeaderInfo = ({ info }: IProps) => {
-    const email = info.email || 'info@glavcenter.ru';
-    const phone = info.phone || '8 (943) 328-12-15';
+    const email = info?.email || 'info@glavcenter.ru';
+    const phone = info?.phone || '8 (943) 328-12-15';
 
     function phoneToDigits(phone: string): string {
         return phone.replace(/\D/g, '');

@@ -72,7 +72,7 @@ const Modal = () => {
         if (isOpen) {
             setIsLoading(true);
             let rand = Math.floor(Math.random() * (9 - 5 + 1)) + 5;
-            timer = setTimeout(() => setIsLoading(false), Math.floor(rand) * 10);
+            timer = setTimeout(() => setIsLoading(false), Math.floor(rand) * 1000);
         }
 
         return () => {

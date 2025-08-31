@@ -40,7 +40,15 @@ const ModalText = styled.div`
     }
 `
 
-const ModalCalculator = ({close}: any) => {
+interface CalculatorConfig {
+    modalTitle: string;
+    modalSubtitle: string;
+    modalDescription: string;
+    modalInstruction: string;
+    modalSubmitText: string;
+}
+
+const ModalCalculator = ({close, config}: {close: () => void, config: CalculatorConfig}) => {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
 
@@ -76,10 +84,10 @@ const ModalCalculator = ({close}: any) => {
     return (
         <ModalForm onSubmit={handleSubmit}>
             <ModalText>
-                <h3>Поздравляем!</h3>
-                <p>Вы сможете списать свои задолженности по закону</p>
-                <p>Наш специалист расскажет подробности по телефону</p>
-                <p>От вас потребуется Номер телефона и Имя</p>
+                <h3>{config.modalTitle}</h3>
+                <p>{config.modalSubtitle}</p>
+                <p>{config.modalDescription}</p>
+                <p>{config.modalInstruction}</p>
             </ModalText>
             <StyledInput
                 placeholder={'Имя'}
@@ -92,7 +100,7 @@ const ModalCalculator = ({close}: any) => {
                 value={phone}
                 onPhoneChange={setPhone}
             />
-            <SubmitBtn value={'Отправить заявку'} />
+            <SubmitBtn value={config.modalSubmitText} />
         </ModalForm>
     );
 };

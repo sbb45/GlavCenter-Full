@@ -97,9 +97,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <html lang="ru">
         <body className={RobotoFont.variable}>
         <ModalProvider>
-            <Header info={info.content.header} />
+            <Header info={info?.content?.header} />
             {children}
-            <Footer info={info.content.footer} />
+            <Footer info={info?.content?.footer} />
             <Modal />
         </ModalProvider>
         </body>

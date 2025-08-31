@@ -7,7 +7,8 @@ import {bgLightColor, blackColor, lightTextColor, primaryColor, whiteColor} from
 
 interface IProps{
     value: string[],
-    setValue: React.Dispatch<React.SetStateAction<string[]>>;
+    setValue: React.Dispatch<React.SetStateAction<string[]>>,
+    options?: string[]
 }
 
 const CheckboxGroup = styled.div`
@@ -67,9 +68,7 @@ const Box = styled.span<{ $checked?: boolean }>`
     }
 `;
 
-const StyledCheckboxGroup = ({value, setValue}: IProps) => {
-
-    const options = ["МФО", "Штрафы", "Налоги", "Банки", "ЖКХ", "Другой вариант"];
+const StyledCheckboxGroup = ({value, setValue, options = ["МФО", "Штрафы", "Налоги", "Банки", "ЖКХ", "Другой вариант"]}: IProps) => {
 
     const toggle = (value: string) => {
         setValue((prev) =>

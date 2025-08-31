@@ -81,3 +81,24 @@ model Service {
   content   String    @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
   createdAt DateTime? @default(now())
 }
+
+model Calculator {
+  id               String    @id @default(cuid())
+  title            String    @default("")
+  isActive         String?   @default("inactive")
+  overdueTitle     String    @default("Имеются ли просрочки?")
+  debtTitle        String    @default("Сумма долга")
+  paymentTitle     String    @default("Месячный платёж")
+  whoOwesTitle     String    @default("Перед кем долги?")
+  debtMax          Int?      @default(1000000)
+  paymentMax       Int?      @default(40000)
+  overdueOptions   String?   @default("[\"<1 месяца\",\">1 месяца\",\">6 месяцев\",\">1 года\",\"Плачу вовремя\"]")
+  whoOwesOptions   String?   @default("[\"МФО\",\"Штрафы\",\"Налоги\",\"Банки\",\"ЖКХ\",\"Другой вариант\"]")
+  submitButtonText String    @default("Расчитать стоимость")
+  modalTitle       String    @default("Поздравляем!")
+  modalSubtitle    String    @default("Вы сможете списать свои задолженности по закону")
+  modalDescription String    @default("Наш специалист расскажет подробности по телефону")
+  modalInstruction String    @default("От вас потребуется Номер телефона и Имя")
+  modalSubmitText  String    @default("Отправить заявку")
+  createdAt        DateTime? @default(now())
+}

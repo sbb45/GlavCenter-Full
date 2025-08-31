@@ -495,6 +495,129 @@ input ServiceCreateInput {
   createdAt: DateTime
 }
 
+type Calculator {
+  id: ID!
+  title: String
+  isActive: CalculatorIsActiveType
+  overdueTitle: String
+  debtTitle: String
+  paymentTitle: String
+  whoOwesTitle: String
+  debtMax: Int
+  paymentMax: Int
+  overdueOptions: JSON
+  whoOwesOptions: JSON
+  submitButtonText: String
+  modalTitle: String
+  modalSubtitle: String
+  modalDescription: String
+  modalInstruction: String
+  modalSubmitText: String
+  createdAt: DateTime
+}
+
+enum CalculatorIsActiveType {
+  active
+  inactive
+}
+
+input CalculatorWhereUniqueInput {
+  id: ID
+}
+
+input CalculatorWhereInput {
+  AND: [CalculatorWhereInput!]
+  OR: [CalculatorWhereInput!]
+  NOT: [CalculatorWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  isActive: CalculatorIsActiveTypeNullableFilter
+  overdueTitle: StringFilter
+  debtTitle: StringFilter
+  paymentTitle: StringFilter
+  whoOwesTitle: StringFilter
+  debtMax: IntNullableFilter
+  paymentMax: IntNullableFilter
+  submitButtonText: StringFilter
+  modalTitle: StringFilter
+  modalSubtitle: StringFilter
+  modalDescription: StringFilter
+  modalInstruction: StringFilter
+  modalSubmitText: StringFilter
+  createdAt: DateTimeNullableFilter
+}
+
+input CalculatorIsActiveTypeNullableFilter {
+  equals: CalculatorIsActiveType
+  in: [CalculatorIsActiveType!]
+  notIn: [CalculatorIsActiveType!]
+  not: CalculatorIsActiveTypeNullableFilter
+}
+
+input CalculatorOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  isActive: OrderDirection
+  overdueTitle: OrderDirection
+  debtTitle: OrderDirection
+  paymentTitle: OrderDirection
+  whoOwesTitle: OrderDirection
+  debtMax: OrderDirection
+  paymentMax: OrderDirection
+  submitButtonText: OrderDirection
+  modalTitle: OrderDirection
+  modalSubtitle: OrderDirection
+  modalDescription: OrderDirection
+  modalInstruction: OrderDirection
+  modalSubmitText: OrderDirection
+  createdAt: OrderDirection
+}
+
+input CalculatorUpdateInput {
+  title: String
+  isActive: CalculatorIsActiveType
+  overdueTitle: String
+  debtTitle: String
+  paymentTitle: String
+  whoOwesTitle: String
+  debtMax: Int
+  paymentMax: Int
+  overdueOptions: JSON
+  whoOwesOptions: JSON
+  submitButtonText: String
+  modalTitle: String
+  modalSubtitle: String
+  modalDescription: String
+  modalInstruction: String
+  modalSubmitText: String
+  createdAt: DateTime
+}
+
+input CalculatorUpdateArgs {
+  where: CalculatorWhereUniqueInput!
+  data: CalculatorUpdateInput!
+}
+
+input CalculatorCreateInput {
+  title: String
+  isActive: CalculatorIsActiveType
+  overdueTitle: String
+  debtTitle: String
+  paymentTitle: String
+  whoOwesTitle: String
+  debtMax: Int
+  paymentMax: Int
+  overdueOptions: JSON
+  whoOwesOptions: JSON
+  submitButtonText: String
+  modalTitle: String
+  modalSubtitle: String
+  modalDescription: String
+  modalInstruction: String
+  modalSubmitText: String
+  createdAt: DateTime
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -543,6 +666,12 @@ type Mutation {
   updateServices(data: [ServiceUpdateArgs!]!): [Service]
   deleteService(where: ServiceWhereUniqueInput!): Service
   deleteServices(where: [ServiceWhereUniqueInput!]!): [Service]
+  createCalculator(data: CalculatorCreateInput!): Calculator
+  createCalculators(data: [CalculatorCreateInput!]!): [Calculator]
+  updateCalculator(where: CalculatorWhereUniqueInput!, data: CalculatorUpdateInput!): Calculator
+  updateCalculators(data: [CalculatorUpdateArgs!]!): [Calculator]
+  deleteCalculator(where: CalculatorWhereUniqueInput!): Calculator
+  deleteCalculators(where: [CalculatorWhereUniqueInput!]!): [Calculator]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -587,6 +716,9 @@ type Query {
   service(where: ServiceWhereUniqueInput!): Service
   services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
   servicesCount(where: ServiceWhereInput! = {}): Int
+  calculator(where: CalculatorWhereUniqueInput!): Calculator
+  calculators(where: CalculatorWhereInput! = {}, orderBy: [CalculatorOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CalculatorWhereUniqueInput): [Calculator!]
+  calculatorsCount(where: CalculatorWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

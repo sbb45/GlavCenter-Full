@@ -70,12 +70,11 @@ export default async function Home() {
         getReviews(),
         getServices(),
     ]);
-    console.log(services)
 
     return (
         <IndexWrapper>
-            <StartSection content={componentData.content.start} services={services} />
-            <AboutSection content={componentData.content.about} />
+            <StartSection content={componentData?.content?.start} services={services} />
+            <AboutSection content={componentData?.content?.about} />
             <ReviewSection reviews={reviews} />
         </IndexWrapper>
     );
