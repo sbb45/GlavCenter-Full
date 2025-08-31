@@ -2,7 +2,7 @@
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
     <data-source source="LOCAL" name="keystone" uuid="56285a0c-989f-4a58-80fd-fbb1dccfeb06">
-      <driver-ref>sqlite.xerial</driver-ref>
+      <driver-ref>58834a01-e094-4e2f-8557-d6a8fe083f29</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/keystone-admin/keystone.db</jdbc-url>
