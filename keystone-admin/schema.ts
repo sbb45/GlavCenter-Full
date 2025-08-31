@@ -26,82 +26,69 @@ import { document } from '@keystone-6/fields-document'
 // the generated types from '.keystone/types'
 import { type Lists } from '.keystone/types'
 
-export const lists = {
-  User: list({
-    // WARNING
-    //   for this starter project, anyone can create, query, update and delete anything
-    //   if you want to prevent random people on the internet from accessing your data,
-    //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
-    access: allowAll,
+export const lists: Lists = {
 
-    // this is the fields for our User list
-    fields: {
-      // by adding isRequired, we enforce that every User should have a name
-      //   if no name is provided, an error will be displayed
-      name: text({ validation: { isRequired: true } }),
-
-      email: text({
-        validation: { isRequired: true },
-        // by adding isIndexed: 'unique', we're saying that no user can have the same
-        // email as another user - this may or may not be a good idea for your project
-        isIndexed: 'unique',
-      }),
-
-      password: password({ validation: { isRequired: true } }),
-
-      // we can use this field to see what Posts this User has authored
-      //   more on that in the Post list below
-      posts: relationship({ ref: 'Post.author', many: true }),
-
-      createdAt: timestamp({
-        // this sets the timestamp to Date.now() when the user is first created
-        defaultValue: { kind: 'now' },
-      }),
-    },
-  }),
+    // ========================
+    // Раздел: Пользователи
+    // ========================
+    User: list({
+        access: allowAll,
+        ui: {
+            labelField: 'name',
+            listView: {
+                initialColumns: ['name', 'email', 'createdAt'],
+                initialSort: { field: 'createdAt', direction: 'DESC' },
+            },
+            // Заголовок раздела в боковом меню
+            description: 'Пользователи системы',
+        },
+        fields: {
+            name: text({ validation: { isRequired: true }, label: 'Имя' }),
+            email: text({ validation: { isRequired: true }, isIndexed: 'unique', label: 'Электронная почта' }),
+            password: password({ validation: { isRequired: true }, label: 'Пароль' }),
+            posts: relationship({ ref: 'Post.author', many: true, label: 'Посты пользователя' }),
+            createdAt: timestamp({ defaultValue: { kind: 'now' }, label: 'Создано' }),
+        },
+    }),
 
     Client: list({
-        // WARNING
-        //   for this starter project, anyone can create, query, update and delete anything
-        //   if you want to prevent random people on the internet from accessing your data,
-        //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
         access: allowAll,
-
-        fields: {
-            // Required
-            name: text({ validation: { isRequired: true } }),
-            phone: text({
-                validation: { isRequired: true },
-                isIndexed: 'unique',
-            }),
-
-            // Additional data
-            question: text(),
-            overdue: text(),
-            debt: integer(),
-            payment: integer(),
-            whoOwes: json({
-                defaultValue: [""]
-            }),
-
-            // Other
-            createdAt: timestamp({
-                defaultValue: { kind: 'now' },
-            }),
-        },
         ui: {
+            labelField: 'name',
             listView: {
                 initialColumns: ['name', 'phone', 'question', 'overdue', 'debt', 'payment', 'whoOwes'],
                 initialSort: { field: 'createdAt', direction: 'DESC' },
             },
+            description: 'Клиенты сайта',
+        },
+        fields: {
+            name: text({ validation: { isRequired: true }, label: 'Имя' }),
+            phone: text({ validation: { isRequired: true }, isIndexed: 'unique', label: 'Телефон' }),
+            question: text({ label: 'Вопрос' }),
+            overdue: text({ label: 'Просрочка' }),
+            debt: integer({ label: 'Долг' }),
+            payment: integer({ label: 'Платёж' }),
+            whoOwes: json({ defaultValue: [""], label: 'Кто должен' }),
+            createdAt: timestamp({ defaultValue: { kind: 'now' }, label: 'Создано' }),
         },
     }),
 
+    // ========================
+    // Раздел: Наполнение сайта
+    // ========================
     Post: list({
         access: allowAll,
+        ui: {
+            labelField: 'title',
+            description: 'Посты на сайте',
+            listView: {
+                initialColumns: ['title', 'author', 'createdAt'],
+                initialSort: { field: 'createdAt', direction: 'DESC' },
+            },
+        },
         fields: {
-            title: text({ validation: { isRequired: true } }),
-            description: text(),
+            title: text({ validation: { isRequired: true }, label: 'Заголовок' }),
+            description: text({ label: 'Описание' }),
             content: document({
                 formatting: true,
                 layouts: [
@@ -113,10 +100,97 @@ export const lists = {
                 ],
                 links: true,
                 dividers: true,
+                label: 'Контент',
             }),
-            image: image({ storage: 'my_local_images' }),
-            author: relationship({ ref: 'User.posts', many: false }),
-            createdAt: timestamp({ defaultValue: { kind: 'now' } }),
+            image: image({ storage: 'my_local_images', label: 'Изображение' }),
+            author: relationship({ ref: 'User.posts', many: false, label: 'Автор' }),
+            createdAt: timestamp({ defaultValue: { kind: 'now' }, label: 'Создано' }),
         },
-    })
+    }),
+
+    Component: list({
+        access: allowAll,
+        ui: {
+            labelField: 'title',
+            description: 'Компоненты страниц',
+            listView: {
+                initialColumns: ['title', 'slug', 'createdAt'],
+                initialSort: { field: 'createdAt', direction: 'DESC' },
+            },
+        },
+        fields: {
+            title: text({ label: 'Название', validation: { isRequired: true } }),
+            slug: text({ validation: { isRequired: true }, isIndexed: 'unique', label: 'Slug' }),
+            content: json({ label: 'Контент' }),
+            createdAt: timestamp({ defaultValue: { kind: 'now' }, label: 'Создано' }),
+        },
+    }),
+
+    Review: list({
+        access: allowAll,
+        ui: {
+            labelField: 'createdAt',
+            description: 'Отзывы пользователей',
+            listView: {
+                initialColumns: ['image', 'createdAt'],
+                initialSort: { field: 'createdAt', direction: 'DESC' },
+            },
+        },
+        fields: {
+            image: image({ storage: 'my_local_images', label: 'Изображение' },),
+            content: document({
+                formatting: true,
+                layouts: [[1,1],[1,1,1],[2,1],[1,2],[1,2,1]],
+                links: true,
+                dividers: true,
+                label: 'Контент',
+            }),
+            createdAt: timestamp({ defaultValue: { kind: 'now' }, label: 'Создано' }),
+        },
+    }),
+    Advantage: list({
+        access: allowAll,
+        ui: {
+            labelField: 'title',
+            description: 'Преимущества работы с нами',
+            listView: {
+                initialColumns: ['title', 'content', 'createdAt'],
+                initialSort: { field: 'createdAt', direction: 'DESC' },
+            },
+        },
+        fields: {
+            title: text({ validation: { isRequired: true }, label: 'Заголовок' }),
+            content: document({
+                formatting: true,
+                layouts: [[1,1],[1,1,1],[2,1],[1,2],[1,2,1]],
+                links: true,
+                dividers: true,
+                label: 'Контент',
+            }),
+            createdAt: timestamp({ defaultValue: { kind: 'now' }, label: 'Создано' }),
+        },
+    }),
+    Service: list({
+        access: allowAll,
+        ui: {
+            labelField: 'title',
+            description: 'Услуги',
+            listView: {
+                initialColumns: ['title', 'content', 'createdAt'],
+                initialSort: { field: 'createdAt', direction: 'DESC' },
+            },
+        },
+        fields: {
+            title: text({ validation: { isRequired: true }, label: 'Заголовок' }),
+            content: document({
+                formatting: true,
+                layouts: [[1,1],[1,1,1],[2,1],[1,2],[1,2,1]],
+                links: true,
+                dividers: true,
+                label: 'Контент',
+            }),
+            createdAt: timestamp({ defaultValue: { kind: 'now' }, label: 'Создано' }),
+        },
+    }),
 } satisfies Lists
+

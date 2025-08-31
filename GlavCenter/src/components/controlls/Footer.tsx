@@ -4,6 +4,18 @@ import styled from "styled-components";
 import {lightTextColor, primaryColor} from "@/styles/colors";
 import HeaderLinks from "@/components/controlls/HeaderLinks";
 
+interface FooterInfo {
+    address: string;
+    schedule: string;
+    dayOff: string;
+    phone: string;
+    copyright: string;
+}
+
+interface IProps {
+    info: FooterInfo;
+}
+
 const FooterWrapper = styled.footer`
     display: flex;
     align-items: start;
@@ -78,23 +90,29 @@ const FooterCopyright = styled.p`
 `
 
 
-const Footer = () => {
+const Footer = ({ info }: IProps) => {
+    const address = info.address || 'Малышева 51, офис 2408';
+    const schedule = info.schedule || 'пн-пт 10:00-19:00 сб 10:00-15:00';
+    const dayOff = info.dayOff || 'вс выходной';
+    const phone = info.phone || '8 (943) 328-12-15';
+    const copyright = info.copyright || '© 2025 OOO "ГЦБ"';
+
     return (
         <FooterWrapper>
             <FooterInfo>
                 <FooterInfoBlock>
                     <h3>Адрес</h3>
-                    <h4>Малышева 51, офис 2408</h4>
-                    <p>пн-пт 10:00-19:00 сб 10:00-15:00<br/>вс выходной</p>
+                    <h4>{address}</h4>
+                    <p>{schedule}<br/>{dayOff}</p>
                 </FooterInfoBlock>
                 <FooterInfoBlock>
                     <h3>Контакты</h3>
-                    <h4>8 (943) 328-12-15</h4>
+                    <h4>{phone}</h4>
                 </FooterInfoBlock>
             </FooterInfo>
             <FooterLine />
             <FooterLinks>
-                <FooterCopyright>© 2025 OOO "ГЦБ"</FooterCopyright>
+                <FooterCopyright>{copyright}</FooterCopyright>
                 <HeaderLinks footer />
             </FooterLinks>
         </FooterWrapper>

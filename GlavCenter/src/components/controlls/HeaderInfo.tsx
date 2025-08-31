@@ -3,6 +3,15 @@ import styled from "styled-components";
 import {primaryColor, primaryHoverColor, whiteColor} from "@/styles/colors";
 import Link from "next/link";
 
+interface HeaderInfo {
+    email: string;
+    phone: string;
+}
+
+interface IProps {
+    info: HeaderInfo;
+}
+
 const InfoWrapper = styled.div`
     display: flex;
     justify-content: center;
@@ -25,11 +34,17 @@ const InfoWrapper = styled.div`
     }
 `
 
-const HeaderInfo = () => {
+const HeaderInfo = ({ info }: IProps) => {
+    const email = info.email || 'info@glavcenter.ru';
+    const phone = info.phone || '8 (943) 328-12-15';
+
+    function phoneToDigits(phone: string): string {
+        return phone.replace(/\D/g, '');
+    }
     return (
         <InfoWrapper>
-            <Link href="mailto:info@glavcenter.ru">info@glavcenter.ru</Link>
-            <Link href="tel:89433281215">8 (943) 328-12-15</Link>
+            <Link href={`mailto:${email}`}>{email}</Link>
+            <Link href={`tel:${phoneToDigits(phone)}`}>{phone}</Link>
         </InfoWrapper>
     );
 };

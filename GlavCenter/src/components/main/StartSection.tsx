@@ -1,3 +1,4 @@
+'use client'
 import React  from 'react';
 import styled from "styled-components";
 import {headingColor, primaryColor, textColor} from "@/styles/colors";
@@ -5,7 +6,28 @@ import {ContentLeft, ImageRight, Section} from "@/app/page.styled";
 import InfoBlock from "@/components/main/InfoBlock";
 import Calculator from "@/components/main/calculator/Calculator";
 
+interface CardData {
+    value: string;
+    label: string;
+}
+
+interface StartContent {
+    title: string;
+    cards: CardData[];
+}
+interface ServiceItem {
+    id: string;
+    title: string;
+    content: { document: any };
+}
+
+interface StartSectionProps {
+    content: StartContent;
+    services: any;
+}
+
 const Title = styled.h1`
+    width: 100px;
     font-size: calc(45px + 3vw);
     font-weight: 700;
     line-height: 1;
@@ -78,30 +100,23 @@ const Card = styled.div`
     }
 `
 
-const StartSection = () => {
+const StartSection: React.FC<StartSectionProps> = ({ content, services}) => {
+
     return (
         <Section>
             <ContentLeft>
-                <Title>
-                    БАНКРОТСТВО<br/>ФИЗИЧЕСКИХ<br/>ЛИЦ
-                </Title>
+                <Title>{content.title}</Title>
 
                 <Cards>
-                    <Card>
-                        <h4>20К</h4>
-                        <h3>Счастливых клиентов</h3>
-                    </Card>
-                    <Card>
-                        <h4>10МЛРД</h4>
-                        <h3>Списано долгов</h3>
-                    </Card>
-                    <Card>
-                        <h4>137</h4>
-                        <h3>Офисов по всей стране</h3>
-                    </Card>
+                    {content.cards.map((card, idx) => (
+                        <Card key={idx}>
+                            <h4>{card.value}</h4>
+                            <h3>{card.label}</h3>
+                        </Card>
+                    ))}
                 </Cards>
 
-                <InfoBlock />
+                <InfoBlock services={services} />
                 <Calculator />
             </ContentLeft>
             <ImageRight $num={3} />

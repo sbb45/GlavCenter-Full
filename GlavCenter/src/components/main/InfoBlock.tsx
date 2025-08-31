@@ -3,7 +3,19 @@ import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import {headingColor, primaryColor, textColor, textGrayColor} from "@/styles/colors";
 import Link from "next/link";
+import RichTextRenderer from "@/components/RichTextRenderer";
 
+interface ServiceItem {
+    id: string;
+    title: string;
+    content: {
+        document: any;
+    };
+}
+
+interface ServiceProps {
+    services: ServiceItem[];
+}
 const WrapperInfo = styled.div`
     display: flex;
     justify-content: space-between;
@@ -144,87 +156,57 @@ const AccordionContent = styled.div<{ $isOpen: boolean }>`
 `
 
 
-const InfoBlock = () => {
-    const [isActive, setIsActive] = useState(true);
-    const [currentText, setCurrentText] = useState("");
+const InfoBlock: React.FC<ServiceProps> = ({ services }) => {
     const [activeIndex, setActiveIndex] = useState(0);
     const [openMobileIndex, setOpenMobileIndex] = useState<number | null>(null);
 
-    const texts = {
-        "Бесплатный сбор документов": "Сбор документов в банках и госсударственных органов мы осуществляем самостоятельно и БЕСПЛАТНО (включая платные справки)",
-        "Без вашего присутствия в суде": "Вам не придется ходить в суд, мы всё сделаем за вас",
-        "Без скрытых платежей": "В рамках договора проводим дополнительные юридические услуги бесплатно (отмена судебных приказов)",
-    } as const;
-    type TextKeys = keyof typeof texts
-
-
-    useEffect(() => {
-        setCurrentText(texts['Бесплатный сбор документов'])
-    }, []);
-    const handleButtonClick = (buttonText: TextKeys, index: number) => {
-        setCurrentText(texts[buttonText]);
-        setIsActive(true);
-        setActiveIndex(index);
-    };
-
-    const entries = Object.entries(texts) as Array<[TextKeys, string]>;
+    const currentService = services[activeIndex];
 
     return (
         <>
             {/* Desktop / tablet layout */}
             <WrapperInfo>
                 <ButtonsGroup>
-                    <ActiveLine $activeIndex={activeIndex} $isActive={isActive} />
-                    <Button
-                        $isActive={isActive && currentText === texts["Бесплатный сбор документов"]}
-                        onClick={() => handleButtonClick("Бесплатный сбор документов", 0)}
-                    >
-                        Бесплатный сбор документов
-                    </Button>
-                    <Button
-                        $isActive={isActive && currentText === texts["Без вашего присутствия в суде"]}
-                        onClick={() => handleButtonClick("Без вашего присутствия в суде", 1)}
-                    >
-                        Без вашего присутствия в суде
-                    </Button>
-                    <Button
-                        $isActive={isActive && currentText === texts["Без скрытых платежей"]}
-                        onClick={() => handleButtonClick("Без скрытых платежей", 2)}
-                    >
-                        Без скрытых платежей
-                    </Button>
+                    <ActiveLine $activeIndex={activeIndex} $isActive={true} />
+                    {services.map((service, index) => (
+                        <Button
+                            key={service.id}
+                            $isActive={activeIndex === index}
+                            onClick={() => setActiveIndex(index)}
+                        >
+                            {service.title}
+                        </Button>
+                    ))}
                 </ButtonsGroup>
                 <TextBlock>
-                    {currentText}
+                    {currentService && <RichTextRenderer document={currentService.content.document} />}
                 </TextBlock>
             </WrapperInfo>
 
             {/* Mobile layout: accordion */}
             <MobileAccordion>
-                {entries.map(([title, description], index) => {
+                {services.map((service, index) => {
                     const isOpen = openMobileIndex === index;
                     return (
-                        <AccordionItem key={title}>
+                        <AccordionItem key={service.id}>
                             <AccordionHeader
                                 $isOpen={isOpen}
                                 onClick={() => setOpenMobileIndex(isOpen ? null : index)}
                                 aria-expanded={isOpen}
                                 aria-controls={`accordion-content-${index}`}
                             >
-                                {title}
+                                {service.title}
                                 <AccordionIcon $isOpen={isOpen}>+</AccordionIcon>
                             </AccordionHeader>
                             <AccordionContent id={`accordion-content-${index}`} $isOpen={isOpen}>
-                                {description}
+                                <RichTextRenderer document={service.content.document} />
                             </AccordionContent>
                         </AccordionItem>
-                    )
+                    );
                 })}
             </MobileAccordion>
 
-            <MoreLink href={'/services'}>
-                Все услуги
-            </MoreLink>
+            <MoreLink href={'/services'}>Все услуги</MoreLink>
         </>
     );
 };

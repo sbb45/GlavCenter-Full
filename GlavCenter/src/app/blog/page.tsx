@@ -43,7 +43,7 @@ export default function Blog() {
         <IndexWrapper>
             <BlogContent>
                 <h2>Блог</h2>
-                    {loading ? (<Spinner />) : posts.length=== 0 ? (
+                    {loading ? (<Spinner />) : !posts  || posts.length=== 0 ? (
                         <EmptyBlog>Постов не найдено</EmptyBlog>
                     ): (
                         <BlogWrapper>

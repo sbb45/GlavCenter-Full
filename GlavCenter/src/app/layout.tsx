@@ -9,19 +9,22 @@ import Modal from "@/components/other/Modal";
 const RobotoFont = Roboto({
     variable: "--font-roboto",
     subsets: ["latin", "cyrillic"],
-    weight: ["300","400", "500", "700", "900"],
+    weight: ["300", "400", "500", "700", "900"],
     display: "swap",
 });
 
 export const metadata: Metadata = {
     title: "ГлавЦентр",
-    description: "ГлавЦентр — услуги по банкротству физических лиц. Мы помогаем списывать долги, сохранять имущество и решать финансовые проблемы. Более 20 000 счастливых клиентов.",
+    description:
+        "ГлавЦентр — услуги по банкротству физических лиц. Мы помогаем списывать долги, сохранять имущество и решать финансовые проблемы. Более 20 000 счастливых клиентов.",
     creator: "ГлавЦентр",
     publisher: "ГлавЦентр",
-    keywords: "банкротство, физические лица, долги, списание долгов, юридические услуги, помощь в банкротстве, финансовые проблемы, юристы",
+    keywords:
+        "банкротство, физические лица, долги, списание долгов, юридические услуги, помощь в банкротстве, финансовые проблемы, юристы",
     openGraph: {
         title: "ГлавЦентр",
-        description: "ГлавЦентр — услуги по банкротству физических лиц. Мы помогаем списывать долги, сохранять имущество и решать финансовые проблемы. Более 20 000 счастливых клиентов.",
+        description:
+            "ГлавЦентр — услуги по банкротству физических лиц. Мы помогаем списывать долги, сохранять имущество и решать финансовые проблемы. Более 20 000 счастливых клиентов.",
         url: "https://glavcenter.ru",
         siteName: "ГлавЦентр",
         images: [
@@ -45,24 +48,58 @@ export const metadata: Metadata = {
     twitter: {
         card: "summary_large_image",
         title: "ГлавЦентр",
-        description: "ГлавЦентр — услуги по банкротству физических лиц. Мы помогаем списывать долги, сохранять имущество и решать финансовые проблемы. Более 20 000 счастливых клиентов.",
+        description:
+            "ГлавЦентр — услуги по банкротству физических лиц. Мы помогаем списывать долги, сохранять имущество и решать финансовые проблемы. Более 20 000 счастливых клиентов.",
         images: "/favicon/web-app-manifest-512x512.png",
     },
 };
 
 
-export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
-    children: React.ReactNode;
-}>) {
+async function fetchInformation() {
+    const query = `
+    query Information {
+      component(where: { slug: "information" }) {
+        content
+      }
+    }
+  `;
+
+    try {
+        const res = await fetch("http://localhost:4000/admin/api/graphql", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query }),
+        });
+
+        if (!res.ok) {
+            const text = await res.text();
+            throw new Error(`GraphQL request failed: ${res.status} ${res.statusText}\n${text}`);
+        }
+
+        const { data } = await res.json();
+        return data.component;
+    } catch (error) {
+        console.error("Failed to fetch information:", error);
+        return {
+            content: {
+                header: {},
+                footer: {},
+            },
+        };
+    }
+}
+
+// Async RootLayout с безопасным fetch данных
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+    const info = await fetchInformation();
+
     return (
         <html lang="ru">
         <body className={RobotoFont.variable}>
         <ModalProvider>
-            <Header />
+            <Header info={info.content.header} />
             {children}
-            <Footer />
+            <Footer info={info.content.footer} />
             <Modal />
         </ModalProvider>
         </body>

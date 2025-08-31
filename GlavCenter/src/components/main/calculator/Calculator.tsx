@@ -18,8 +18,8 @@ const WrapperCalculator = styled.form`
     padding: 32px 24px;
     background-color: ${whiteColor};
     border-radius: 24px;
-    bottom: 50%;
-    right: 32px;
+    bottom: 40%;
+    right: 1%;
     transform: translate(0, 50%);
     .blockWrapper{
         width: 100%;
@@ -28,7 +28,7 @@ const WrapperCalculator = styled.form`
         margin-top: 12px;
     }
     @media (max-width: 1550px) {
-        right: 16px;
+        right: 12px;
     }
     @media (max-width: 1300px) {
         position: relative;

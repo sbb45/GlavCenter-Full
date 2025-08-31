@@ -48,3 +48,36 @@ model Post {
 
   @@index([authorId])
 }
+
+model Component {
+  id        String    @id @default(cuid())
+  title     String    @default("")
+  slug      String    @unique @default("")
+  content   String?
+  createdAt DateTime? @default(now())
+}
+
+model Review {
+  id              String    @id @default(cuid())
+  image_id        String?
+  image_filesize  Int?
+  image_width     Int?
+  image_height    Int?
+  image_extension String?
+  content         String    @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  createdAt       DateTime? @default(now())
+}
+
+model Advantage {
+  id        String    @id @default(cuid())
+  title     String    @default("")
+  content   String    @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  createdAt DateTime? @default(now())
+}
+
+model Service {
+  id        String    @id @default(cuid())
+  title     String    @default("")
+  content   String    @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  createdAt DateTime? @default(now())
+}

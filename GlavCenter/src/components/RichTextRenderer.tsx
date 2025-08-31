@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import styled from 'styled-components';
 
@@ -48,7 +49,7 @@ const RichTextContainer = styled.div`
     }
     
     p {
-      margin-bottom: 1.5rem;
+      margin-bottom: .3rem;
       color: #374151;
       font-size: 1.1rem;
       line-height: 1.8;

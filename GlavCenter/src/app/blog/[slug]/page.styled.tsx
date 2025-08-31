@@ -2,10 +2,11 @@ import styled from 'styled-components';
 
 export const BlogContainer = styled.div`
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 120px auto;
   padding: 2rem;
   background: #ffffff;
   min-height: 100vh;
+    border-radius: 24px;
 `;
 
 export const BlogHeader = styled.div`

@@ -1,8 +1,19 @@
+'use client'
 import React from 'react';
 import {ContentLeft, ImageRight, Section} from "@/app/page.styled";
 import styled from "styled-components";
 import Image from "next/image"
 import {headingColor} from "@/styles/colors";
+
+
+interface StartContent {
+    title: string;
+    text: string;
+}
+
+interface StartSectionProps {
+    content: StartContent;
+}
 
 const AboutWrapper = styled.div`
     display: flex;
@@ -41,7 +52,7 @@ const AboutText = styled.p`
 `
 
 
-const AboutSection = () => {
+const AboutSection: React.FC<StartSectionProps> = ({ content }) => {
     return (
         <Section>
             <ContentLeft>
@@ -54,13 +65,10 @@ const AboutSection = () => {
                     />
                     <AboutTexts>
                         <AboutTitle>
-                            О Главном центре банкротства
+                            {content.title}
                         </AboutTitle>
                         <AboutText>
-                            Наша главная цель — дать возможность гражданам России. Которые столкнулись
-                            с финансовыми проблемами и не в состоянии выполнять свои обязательства,
-                            воспользоваться своим ПРАВОМ списать долги в соответствии с ФЗ «О несостоятельности
-                            (банкротстве)» от 26.10.2002 №127-ФЗ в судебном и неудобном порядке
+                            {content.text}
                         </AboutText>
                     </AboutTexts>
                 </AboutWrapper>

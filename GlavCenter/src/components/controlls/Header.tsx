@@ -7,6 +7,13 @@ import {bgSiteColor, headingColor, primaryColor} from "@/styles/colors";
 import Link from "next/link";
 import Logo from "@/components/other/Logo";
 
+interface HeaderProps {
+    info: {
+        email: string;
+        phone: string;
+    };
+}
+
 const HeaderWrapper = styled.header<{$isScrolled: boolean}>`
     display: flex;
     justify-content: space-between;
@@ -111,7 +118,7 @@ const MobilePanel = styled.nav<{ $open: boolean }>`
     }
 `
 
-const Header = () => {
+const Header = ({ info }: HeaderProps) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -127,7 +134,7 @@ const Header = () => {
                 <DesktopLinks>
                     <HeaderLinks />
                 </DesktopLinks>
-                <HeaderInfo />
+                <HeaderInfo info={info} />
                 <MobileRight>
                     <BurgerButton
                         aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}

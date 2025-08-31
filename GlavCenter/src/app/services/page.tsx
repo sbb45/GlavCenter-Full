@@ -1,28 +1,56 @@
-'use client'
-import {IndexWrapper} from "@/app/page.styled";
-import {ServicesContent, ServiceWrapper} from "@/app/services/page.styled";
+import { IndexWrapper } from "@/app/page.styled";
+import { ServicesContent, ServiceWrapper } from "@/app/services/page.styled";
+import RichTextRenderer from "@/components/RichTextRenderer";
 
+interface Service {
+    id: string;
+    title: string;
+    content: {
+        document: any;
+    };
+}
 
-export default function Services() {
+async function getServices(): Promise<Service[]> {
+    const query = `
+    query Services {
+      services {
+        id
+        title
+        content { document }
+      }
+    }
+  `;
+    const res = await fetch("http://localhost:4000/admin/api/graphql", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+        cache: "no-store", // чтобы каждый раз получать актуальные данные
+    });
 
-    const servicesText = [
-        {title: 'Банкротство физических лиц', text: 'В 2025 году есть несколько вариантов списания долгов по кредитам. Чтобы избавиться от задолженностей, нужно подходить под условия Федерального Закона №127 РФ “О несостоятельности (банкротстве)”.'},
-        {title: 'Улучшение кредитной истории', text: 'Кредитная история — это основной показатель доверия банков и кредитных организаций. Мы предлагаем индивидуальное сопровождение клиента на всех этапах процесса. Результат — актуализация информации в кредитной истории, что повышает шансы на одобрение кредитов и снижает процентные ставки.'},
-        {title: 'Защита от коллекторов', text: 'Если вам нужна защита от коллекторов при оформлении банкротства, обращайтесь к юристам. Компания окажет помощь в списании долгов по кредитам, составит заявление в Арбитражный суд для объявления вас банкротом, поможет избавиться от назойливых звонков и посещений приставов.'}
-    ]
+    if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`GraphQL request failed: ${res.status} ${res.statusText}\n${text}`);
+    }
+
+    const { data } = await res.json();
+    return data.services;
+}
+
+export default async function Services() {
+    const services = await getServices();
 
     return (
         <IndexWrapper>
             <ServicesContent>
                 <h2>Услуги</h2>
-                {servicesText.map((service, index) => (
-                    <ServiceWrapper key={index}>
-                        <div className={'title'}>
-                            <h5>0{index+1}</h5>
+                {services.map((service, index) => (
+                    <ServiceWrapper key={service.id}>
+                        <div className="title">
+                            <h5>{String(index + 1).padStart(2, "0")}</h5>
                             <h3>{service.title}</h3>
                         </div>
                         <div>
-                            <p>{service.text}</p>
+                            <RichTextRenderer document={service.content.document} />
                         </div>
                     </ServiceWrapper>
                 ))}

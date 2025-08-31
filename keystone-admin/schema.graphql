@@ -307,6 +307,194 @@ input UserRelateToOneForCreateInput {
   connect: UserWhereUniqueInput
 }
 
+type Component {
+  id: ID!
+  title: String
+  slug: String
+  content: JSON
+  createdAt: DateTime
+}
+
+input ComponentWhereUniqueInput {
+  id: ID
+  slug: String
+}
+
+input ComponentWhereInput {
+  AND: [ComponentWhereInput!]
+  OR: [ComponentWhereInput!]
+  NOT: [ComponentWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  slug: StringFilter
+  createdAt: DateTimeNullableFilter
+}
+
+input ComponentOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  slug: OrderDirection
+  createdAt: OrderDirection
+}
+
+input ComponentUpdateInput {
+  title: String
+  slug: String
+  content: JSON
+  createdAt: DateTime
+}
+
+input ComponentUpdateArgs {
+  where: ComponentWhereUniqueInput!
+  data: ComponentUpdateInput!
+}
+
+input ComponentCreateInput {
+  title: String
+  slug: String
+  content: JSON
+  createdAt: DateTime
+}
+
+type Review {
+  id: ID!
+  image: ImageFieldOutput
+  content: Review_content_Document
+  createdAt: DateTime
+}
+
+type Review_content_Document {
+  document(hydrateRelationships: Boolean! = false): JSON!
+}
+
+input ReviewWhereUniqueInput {
+  id: ID
+}
+
+input ReviewWhereInput {
+  AND: [ReviewWhereInput!]
+  OR: [ReviewWhereInput!]
+  NOT: [ReviewWhereInput!]
+  id: IDFilter
+  createdAt: DateTimeNullableFilter
+}
+
+input ReviewOrderByInput {
+  id: OrderDirection
+  createdAt: OrderDirection
+}
+
+input ReviewUpdateInput {
+  image: ImageFieldInput
+  content: JSON
+  createdAt: DateTime
+}
+
+input ReviewUpdateArgs {
+  where: ReviewWhereUniqueInput!
+  data: ReviewUpdateInput!
+}
+
+input ReviewCreateInput {
+  image: ImageFieldInput
+  content: JSON
+  createdAt: DateTime
+}
+
+type Advantage {
+  id: ID!
+  title: String
+  content: Advantage_content_Document
+  createdAt: DateTime
+}
+
+type Advantage_content_Document {
+  document(hydrateRelationships: Boolean! = false): JSON!
+}
+
+input AdvantageWhereUniqueInput {
+  id: ID
+}
+
+input AdvantageWhereInput {
+  AND: [AdvantageWhereInput!]
+  OR: [AdvantageWhereInput!]
+  NOT: [AdvantageWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  createdAt: DateTimeNullableFilter
+}
+
+input AdvantageOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  createdAt: OrderDirection
+}
+
+input AdvantageUpdateInput {
+  title: String
+  content: JSON
+  createdAt: DateTime
+}
+
+input AdvantageUpdateArgs {
+  where: AdvantageWhereUniqueInput!
+  data: AdvantageUpdateInput!
+}
+
+input AdvantageCreateInput {
+  title: String
+  content: JSON
+  createdAt: DateTime
+}
+
+type Service {
+  id: ID!
+  title: String
+  content: Service_content_Document
+  createdAt: DateTime
+}
+
+type Service_content_Document {
+  document(hydrateRelationships: Boolean! = false): JSON!
+}
+
+input ServiceWhereUniqueInput {
+  id: ID
+}
+
+input ServiceWhereInput {
+  AND: [ServiceWhereInput!]
+  OR: [ServiceWhereInput!]
+  NOT: [ServiceWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  createdAt: DateTimeNullableFilter
+}
+
+input ServiceOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  createdAt: OrderDirection
+}
+
+input ServiceUpdateInput {
+  title: String
+  content: JSON
+  createdAt: DateTime
+}
+
+input ServiceUpdateArgs {
+  where: ServiceWhereUniqueInput!
+  data: ServiceUpdateInput!
+}
+
+input ServiceCreateInput {
+  title: String
+  content: JSON
+  createdAt: DateTime
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -331,6 +519,30 @@ type Mutation {
   updatePosts(data: [PostUpdateArgs!]!): [Post]
   deletePost(where: PostWhereUniqueInput!): Post
   deletePosts(where: [PostWhereUniqueInput!]!): [Post]
+  createComponent(data: ComponentCreateInput!): Component
+  createComponents(data: [ComponentCreateInput!]!): [Component]
+  updateComponent(where: ComponentWhereUniqueInput!, data: ComponentUpdateInput!): Component
+  updateComponents(data: [ComponentUpdateArgs!]!): [Component]
+  deleteComponent(where: ComponentWhereUniqueInput!): Component
+  deleteComponents(where: [ComponentWhereUniqueInput!]!): [Component]
+  createReview(data: ReviewCreateInput!): Review
+  createReviews(data: [ReviewCreateInput!]!): [Review]
+  updateReview(where: ReviewWhereUniqueInput!, data: ReviewUpdateInput!): Review
+  updateReviews(data: [ReviewUpdateArgs!]!): [Review]
+  deleteReview(where: ReviewWhereUniqueInput!): Review
+  deleteReviews(where: [ReviewWhereUniqueInput!]!): [Review]
+  createAdvantage(data: AdvantageCreateInput!): Advantage
+  createAdvantages(data: [AdvantageCreateInput!]!): [Advantage]
+  updateAdvantage(where: AdvantageWhereUniqueInput!, data: AdvantageUpdateInput!): Advantage
+  updateAdvantages(data: [AdvantageUpdateArgs!]!): [Advantage]
+  deleteAdvantage(where: AdvantageWhereUniqueInput!): Advantage
+  deleteAdvantages(where: [AdvantageWhereUniqueInput!]!): [Advantage]
+  createService(data: ServiceCreateInput!): Service
+  createServices(data: [ServiceCreateInput!]!): [Service]
+  updateService(where: ServiceWhereUniqueInput!, data: ServiceUpdateInput!): Service
+  updateServices(data: [ServiceUpdateArgs!]!): [Service]
+  deleteService(where: ServiceWhereUniqueInput!): Service
+  deleteServices(where: [ServiceWhereUniqueInput!]!): [Service]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -363,6 +575,18 @@ type Query {
   post(where: PostWhereUniqueInput!): Post
   posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   postsCount(where: PostWhereInput! = {}): Int
+  component(where: ComponentWhereUniqueInput!): Component
+  components(where: ComponentWhereInput! = {}, orderBy: [ComponentOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ComponentWhereUniqueInput): [Component!]
+  componentsCount(where: ComponentWhereInput! = {}): Int
+  review(where: ReviewWhereUniqueInput!): Review
+  reviews(where: ReviewWhereInput! = {}, orderBy: [ReviewOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ReviewWhereUniqueInput): [Review!]
+  reviewsCount(where: ReviewWhereInput! = {}): Int
+  advantage(where: AdvantageWhereUniqueInput!): Advantage
+  advantages(where: AdvantageWhereInput! = {}, orderBy: [AdvantageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AdvantageWhereUniqueInput): [Advantage!]
+  advantagesCount(where: AdvantageWhereInput! = {}): Int
+  service(where: ServiceWhereUniqueInput!): Service
+  services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
+  servicesCount(where: ServiceWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }
