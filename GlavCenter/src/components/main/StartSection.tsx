@@ -5,6 +5,7 @@ import {headingColor, primaryColor, textColor} from "@/styles/colors";
 import {ContentLeft, ImageRight, Section} from "@/app/page.styled";
 import InfoBlock from "@/components/main/InfoBlock";
 import Calculator from "@/components/main/calculator/Calculator";
+import CalculatorSection from "@/components/main/CalculatorSection";
 
 interface CardData {
     value: string;
@@ -115,6 +116,7 @@ const StartSection: React.FC<StartSectionProps> = ({ content, services}) => {
     return (
         <Section>
             <ContentLeft>
+                <CalculatorSection />
                 <Title>{content?.title || title}</Title>
 
                 <Cards>
@@ -127,7 +129,6 @@ const StartSection: React.FC<StartSectionProps> = ({ content, services}) => {
                 </Cards>
 
                 <InfoBlock services={services} />
-                <Calculator />
             </ContentLeft>
             <ImageRight $num={3} />
         </Section>

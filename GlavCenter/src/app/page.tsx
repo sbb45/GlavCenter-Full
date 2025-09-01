@@ -8,6 +8,8 @@ import {
     DEFAULT_REVIEWS,
     DEFAULT_ADVANTAGES
 } from "@/lib/defaultData";
+import Calculator from "@/components/main/calculator/Calculator";
+import CalculatorSection from "@/components/main/CalculatorSection";
 
 // Получение данных страницы
 async function getPage() {

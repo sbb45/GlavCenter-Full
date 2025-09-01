@@ -1,5 +1,5 @@
-export const primaryColor = '#0058B7';
-export const primaryHoverColor = '#1a2342';
+export const primaryColor = '#98c554';
+export const primaryHoverColor = '#6c8f39';
 
 export const bgColor = '#F6F7FF';
 export const bgSiteColor = '#f6f7ff';
@@ -9,6 +9,6 @@ export const blackColor = '#192442';
 
 export const textColor = '#334866';
 export const textGrayColor = '#8c8c8c';
-export const lightTextColor = '#cfe3ff';
+export const lightTextColor = '#ffffff';
 export const headingColor = '#1A243E';
 

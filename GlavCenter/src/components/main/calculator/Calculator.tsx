@@ -10,7 +10,6 @@ import ModalCalculator from "@/components/main/calculator/ModalCalculator";
 import {useCalculatorConfig} from "@/hooks/useCalculatorConfig";
 
 const WrapperCalculator = styled.form`
-    position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -19,9 +18,6 @@ const WrapperCalculator = styled.form`
     padding: 32px 24px;
     background-color: ${whiteColor};
     border-radius: 24px;
-    bottom: 40%;
-    right: 1%;
-    transform: translate(0, 50%);
     .blockWrapper{
         width: 100%;
     }
