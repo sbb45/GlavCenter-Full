@@ -56,6 +56,9 @@ export const metadata: Metadata = {
 };
 
 
+import { fetchKeystoneSafe } from "@/lib/keystone";
+import { DEFAULT_HEADER, DEFAULT_FOOTER } from "@/lib/defaultData";
+
 async function fetchInformation() {
     const query = `
     query Information {
@@ -65,34 +68,20 @@ async function fetchInformation() {
     }
   `;
 
-    try {
-        const res = await fetch("http://localhost:4000/admin/api/graphql", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ query }),
-        });
+    const result = await fetchKeystoneSafe(
+        query,
+        { component: { content: { header: DEFAULT_HEADER, footer: DEFAULT_FOOTER } } },
+        undefined,
+        { cache: "no-store" }
+    );
 
-        if (!res.ok) {
-            const text = await res.text();
-            throw new Error(`GraphQL request failed: ${res.status} ${res.statusText}\n${text}`);
-        }
-
-        const { data } = await res.json();
-        return data.component;
-    } catch (error) {
-        console.error("Failed to fetch information:", error);
-        return {
-            content: {
-                header: {},
-                footer: {},
-            },
-        };
-    }
+    return result.component;
 }
 
 // Async RootLayout с безопасным fetch данных
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
     const info = await fetchInformation();
+    console.log(info);
 
     return (
         <html lang="ru">

@@ -2,23 +2,12 @@ import StartSection from "@/components/main/StartSection";
 import AboutSection from "@/components/main/AboutSection";
 import ReviewSection from "@/components/main/ReviewSection";
 import { IndexWrapper } from "@/app/page.styled";
-
-// Универсальная функция запроса GraphQL
-async function fetchGraphQL(query: string, variables?: any) {
-    const res = await fetch("http://localhost:4000/admin/api/graphql", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query, variables }),
-    });
-
-    if (!res.ok) {
-        const text = await res.text();
-        throw new Error(`GraphQL request failed: ${res.status} ${res.statusText}\n${text}`);
-    }
-
-    const { data } = await res.json();
-    return data;
-}
+import { fetchKeystoneSafe } from "@/lib/keystone";
+import {
+    DEFAULT_HOME_CONTENT,
+    DEFAULT_REVIEWS,
+    DEFAULT_ADVANTAGES
+} from "@/lib/defaultData";
 
 // Получение данных страницы
 async function getPage() {
@@ -29,8 +18,13 @@ async function getPage() {
       }
     }
   `;
-    const data = await fetchGraphQL(query);
-    return data.component;
+
+    return await fetchKeystoneSafe(
+        query,
+        { component: { content: DEFAULT_HOME_CONTENT } },
+        undefined,
+        { cache: "no-store" }
+    );
 }
 
 // Получение отзывов
@@ -44,14 +38,19 @@ async function getReviews() {
       }
     }
   `;
-    const data = await fetchGraphQL(query);
-    return data.reviews;
+
+    return await fetchKeystoneSafe(
+        query,
+        { reviews: DEFAULT_REVIEWS },
+        undefined,
+        { cache: "no-store" }
+    );
 }
 
-// Получение услуг
-async function getServices() {
+// Получение преимуществ
+async function getAdvantages() {
     const query = `
-    query Advantage {
+    query Advantages {
       advantages {
         id
         title
@@ -59,23 +58,31 @@ async function getServices() {
       }
     }
   `;
-    const data = await fetchGraphQL(query);
-    return data.advantages;
+
+    return await fetchKeystoneSafe(
+        query,
+        { advantages: DEFAULT_ADVANTAGES },
+        undefined,
+        { cache: "no-store" }
+    );
 }
 
 // Главная страница
 export default async function Home() {
-    const [componentData, reviews, services] = await Promise.all([
+    const [componentData, reviewsData, advantagesData] = await Promise.all([
         getPage(),
         getReviews(),
-        getServices(),
+        getAdvantages(),
     ]);
 
     return (
         <IndexWrapper>
-            <StartSection content={componentData?.content?.start} services={services} />
-            <AboutSection content={componentData?.content?.about} />
-            <ReviewSection reviews={reviews} />
+            <StartSection
+                content={componentData.component?.content?.start}
+                services={advantagesData.advantages}
+            />
+            <AboutSection content={componentData.component?.content?.about} />
+            <ReviewSection reviews={reviewsData.reviews} />
         </IndexWrapper>
     );
 }

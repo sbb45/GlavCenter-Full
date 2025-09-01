@@ -1,6 +1,8 @@
 import { IndexWrapper } from "@/app/page.styled";
 import { ServicesContent, ServiceWrapper } from "@/app/services/page.styled";
 import RichTextRenderer from "@/components/RichTextRenderer";
+import { fetchKeystoneSafe } from "@/lib/keystone";
+import { DEFAULT_SERVICES } from "@/lib/defaultData";
 
 interface Service {
     id: string;
@@ -20,20 +22,15 @@ async function getServices(): Promise<Service[]> {
       }
     }
   `;
-    const res = await fetch("http://localhost:4000/admin/api/graphql", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query }),
-        cache: "no-store", // чтобы каждый раз получать актуальные данные
-    });
 
-    if (!res.ok) {
-        const text = await res.text();
-        throw new Error(`GraphQL request failed: ${res.status} ${res.statusText}\n${text}`);
-    }
+    const result = await fetchKeystoneSafe(
+        query,
+        { services: DEFAULT_SERVICES },
+        undefined,
+        { cache: "no-store" }
+    );
 
-    const { data } = await res.json();
-    return data.services;
+    return result.services;
 }
 
 export default async function Services() {

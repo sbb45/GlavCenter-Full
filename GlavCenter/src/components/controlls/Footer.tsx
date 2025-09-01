@@ -5,10 +5,13 @@ import {lightTextColor, primaryColor} from "@/styles/colors";
 import HeaderLinks from "@/components/controlls/HeaderLinks";
 
 interface FooterInfo {
+    company?: string;
     address: string;
+    phone: string;
+    email?: string;
+    workingHours?: string;
     schedule: string;
     dayOff: string;
-    phone: string;
     copyright: string;
 }
 

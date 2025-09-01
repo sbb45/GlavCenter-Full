@@ -14,7 +14,7 @@ interface ServiceItem {
 }
 
 interface ServiceProps {
-    services: ServiceItem[];
+    services?: ServiceItem[];
 }
 const WrapperInfo = styled.div`
     display: flex;
@@ -160,7 +160,9 @@ const InfoBlock: React.FC<ServiceProps> = ({ services }) => {
     const [activeIndex, setActiveIndex] = useState(0);
     const [openMobileIndex, setOpenMobileIndex] = useState<number | null>(null);
 
-    const currentService = services[activeIndex];
+    // Проверяем, что services существует и является массивом
+    const safeServices = Array.isArray(services) ? services : [];
+    const currentService = safeServices[activeIndex];
 
     return (
         <>
@@ -168,7 +170,7 @@ const InfoBlock: React.FC<ServiceProps> = ({ services }) => {
             <WrapperInfo>
                 <ButtonsGroup>
                     <ActiveLine $activeIndex={activeIndex} $isActive={true} />
-                    {services.map((service, index) => (
+                    {safeServices.map((service, index) => (
                         <Button
                             key={service.id}
                             $isActive={activeIndex === index}
@@ -185,7 +187,7 @@ const InfoBlock: React.FC<ServiceProps> = ({ services }) => {
 
             {/* Mobile layout: accordion */}
             <MobileAccordion>
-                {services.map((service, index) => {
+                {safeServices.map((service, index) => {
                     const isOpen = openMobileIndex === index;
                     return (
                         <AccordionItem key={service.id}>

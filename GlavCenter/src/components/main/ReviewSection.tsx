@@ -14,7 +14,7 @@ interface ReviewItem {
 }
 
 interface ReviewsProps {
-    reviews: ReviewItem[];
+    reviews?: ReviewItem[];
 }
 
 const ReviewsSection = styled.div`
@@ -84,6 +84,9 @@ const Review = styled.div`
 `
 
 const ReviewSection: React.FC<ReviewsProps> = ({ reviews }) => {
+    // Проверяем, что reviews существует и является массивом
+    const safeReviews = Array.isArray(reviews) ? reviews : [];
+    
     return (
         <Section>
             <ContentLeft>
@@ -91,7 +94,7 @@ const ReviewSection: React.FC<ReviewsProps> = ({ reviews }) => {
                     <SectionTitle>Что о нас говорят</SectionTitle>
                     <ReviewsContainer>
                         <div>
-                            {reviews.filter((_, i) => i % 2 === 0).map((review) => (
+                            {safeReviews.filter((_, i) => i % 2 === 0).map((review) => (
                                 <Review key={`left-${review.id}`}>
                                     <div className="avatar">
                                         <Image
@@ -106,7 +109,7 @@ const ReviewSection: React.FC<ReviewsProps> = ({ reviews }) => {
                             ))}
                         </div>
                         <div>
-                            {reviews.filter((_, i) => i % 2 !== 0).map((review) => (
+                            {safeReviews.filter((_, i) => i % 2 !== 0).map((review) => (
                                 <Review key={`left-${review.id}`}>
                                     <div className="avatar">
                                         <Image

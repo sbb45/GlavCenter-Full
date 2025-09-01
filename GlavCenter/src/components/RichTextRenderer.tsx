@@ -16,7 +16,7 @@ interface RichTextNode {
 }
 
 interface RichTextRendererProps {
-  document: RichTextNode[];
+  document?: RichTextNode[];
 }
 
 const RichTextContainer = styled.div`
@@ -208,6 +208,11 @@ const StyledOrderedList = styled.ol`
 `;
 
 const RichTextRenderer: React.FC<RichTextRendererProps> = ({ document }) => {
+  // Проверяем, что document существует и является массивом
+  if (!document || !Array.isArray(document)) {
+    return null;
+  }
+
   const renderNode = (node: RichTextNode, index: number): React.ReactNode => {
     // Обработка текстовых узлов с форматированием
     if (node.text) {
