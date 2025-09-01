@@ -10,15 +10,16 @@ interface IProps {
     onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     onPhoneChange?: (value: string) => void;
     inputType?: string;
+    width?: number;
 }
 
-const InputWrapper = styled.div`
+const InputWrapper = styled.div<{ $width?: number }>`
     input, textarea{
         background-color: ${bgSiteColor};
         color: ${textColor};
         border: 2px solid rgba(218,219,240,0.50);
         font-weight: 300;
-        width: 470px;
+        width: ${({ $width }) => $width ? $width : '470'}px;
         height: 58px;
         border-radius: 1.5rem;
         font-size: 20px;
@@ -42,7 +43,7 @@ const InputWrapper = styled.div`
 `
 
 
-const StyledInput = ({placeholder, value, onChange, inputType, onPhoneChange}: IProps) => {
+const StyledInput = ({placeholder, value, onChange, inputType, onPhoneChange, width}: IProps) => {
 
     const handlePhoneChange = (phoneValue: E164Number | undefined) => {
         if (onPhoneChange) {
@@ -51,7 +52,7 @@ const StyledInput = ({placeholder, value, onChange, inputType, onPhoneChange}: I
     };
 
     return (
-        <InputWrapper>
+        <InputWrapper $width={width}>
             {inputType === 'textarea' ? (
                 <textarea
                     required

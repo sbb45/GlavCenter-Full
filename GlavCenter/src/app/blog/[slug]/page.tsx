@@ -1,20 +1,22 @@
 'use client'
 
-import { useEffect, useState } from 'react';
+import {FormEvent, useEffect, useState} from 'react';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import RichTextRenderer from '@/components/RichTextRenderer';
 import {
-  BlogContainer,
-  BlogHeader,
-  BlogTitle,
-  BlogDescription,
-  BlogImage,
-  BlogContent,
-  LoadingContainer,
-  ErrorContainer,
-  BackButton
+    BlogContainer,
+    BlogHeader,
+    BlogTitle,
+    BlogDescription,
+    BlogImage,
+    BlogContent,
+    LoadingContainer,
+    ErrorContainer,
+    BackButton, BlogContact
 } from './page.styled';
+import StyledInput from "@/components/other/StyledInput";
+import SubmitBtn from "@/components/other/SubmitBtn";
 
 interface PostType {
     id: string;
@@ -31,6 +33,35 @@ export default function PostPage() {
     const params = useParams();
     const router = useRouter();
     const id = params?.slug;
+
+    const [name, setName] = useState("");
+    const [phone, setPhone] = useState("");
+    const [windowWidth, setWindowWidth] = useState(0);
+
+    useEffect(() => {
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        handleResize(); // Set initial width
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+
+    // Отправка данных
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+
+        const res = await fetch('/api/clients/create-client', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                name: name,
+                phone: phone,
+            })
+        })
+        console.log(res)
+        setName('')
+        setPhone('')
+    }
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -94,24 +125,28 @@ export default function PostPage() {
             
             <BlogHeader>
                 <BlogTitle>{post.title}</BlogTitle>
-                <BlogDescription>{post.description}</BlogDescription>
+                <BlogDescription>Спишем ваши долги законно с гарантией под ключ</BlogDescription>
             </BlogHeader>
 
-            {post.image && (
-                <BlogImage>
-                    <Image
-                        src={`http://localhost:4000${post.image.url}`}
-                        alt={post.title}
-                        width={1200}
-                        height={600}
-                        priority
-                        style={{
-                            width: '100%',
-                            height: 'auto',
-                        }}
+            <BlogContact onSubmit={handleSubmit}>
+                <h4>Запишитесь на бесплатную консультацию</h4>
+                <div>
+                    <StyledInput
+                        width={windowWidth > 768 ? 300 : undefined}
+                        placeholder={'Имя'}
+                        value={name}
+                        onChange={(e)=>setName(e.target.value)}
                     />
-                </BlogImage>
-            )}
+                    <StyledInput
+                        width={windowWidth > 768 ? 300 : undefined}
+                        placeholder={'Номер телефона'}
+                        inputType={'phone'}
+                        value={phone}
+                        onPhoneChange={setPhone}
+                    />
+                    <SubmitBtn value={'Записаться'} />
+                </div>
+            </BlogContact>
 
             <BlogContent>
                 {post.content?.document && (
