@@ -24,15 +24,6 @@ const WrapperCalculator = styled.form`
     .blockWrapper:nth-last-child(2){
         margin-top: 12px;
     }
-    @media (max-width: 1550px) {
-        right: 12px;
-    }
-    @media (max-width: 1300px) {
-        position: relative;
-        left: 50%;
-        bottom: -60px;
-        transform: translateX(-50%);
-    }
     @media (max-width: 700px) {
         margin-bottom: 64px;
     }
