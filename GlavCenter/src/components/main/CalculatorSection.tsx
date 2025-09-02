@@ -49,8 +49,8 @@ const TextCalculator = styled.div`
     h2{
         color: ${headingColor};
         font-weight: 700;
-        font-size: calc(20px + 0.8vw);
-        width: 100%;
+        font-size: calc(20px + 1vw);
+        width: 70%;
         line-height: 1;
         margin: 0;
     }
@@ -60,6 +60,7 @@ const TextCalculator = styled.div`
         max-width: 550px;
         
         h2{
+            width: 100%;
             font-size: calc(20px + 0.8vw);   
         }
     }

@@ -1,3 +1,4 @@
+import { primaryColor, primaryHoverColor } from '@/styles/colors';
 import styled from 'styled-components';
 
 export const BlogContainer = styled.div`
@@ -147,7 +148,7 @@ export const ErrorContainer = styled.div`
 `;
 
 export const BackButton = styled.button`
-  background: #3b82f6;
+  background: ${primaryColor};
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -173,7 +174,7 @@ export const BackButton = styled.button`
   }
   
   &:hover {
-    background: #2563eb;
+    background: ${primaryHoverColor};
   }
   
   &:active {
