@@ -10,6 +10,7 @@ import {
 } from "@/lib/defaultData";
 import Calculator from "@/components/main/calculator/Calculator";
 import CalculatorSection from "@/components/main/CalculatorSection";
+import React from "react";
 
 // Получение данных страницы
 async function getPage() {
@@ -79,6 +80,7 @@ export default async function Home() {
 
     return (
         <IndexWrapper>
+            <CalculatorSection />
             <StartSection
                 content={componentData.component?.content?.start}
                 services={advantagesData.advantages}

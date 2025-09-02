@@ -11,7 +11,7 @@ const DEFAULT_CONFIG = {
     paymentMax: 40000,
     overdueOptions: ["<1 месяца", ">1 месяца", ">6 месяцев", ">1 года", "Плачу вовремя"],
     whoOwesOptions: ["МФО", "Штрафы", "Налоги", "Банки", "ЖКХ", "Другой вариант"],
-    submitButtonText: 'Расчитать стоимость',
+    submitButtonText: 'Узнать результат',
     modalTitle: 'Поздравляем!',
     modalSubtitle: 'Вы сможете списать свои задолженности по закону',
     modalDescription: 'Наш специалист расскажет подробности по телефону',
@@ -22,7 +22,7 @@ const DEFAULT_CONFIG = {
 export async function GET() {
     const query = `
         query CalculatorConfig {
-            calculators(where: { isActive: { equals: "active" } }, take: 1) {
+            calculators(where: { isActive: { equals: active } }, take: 1) {
                 title
                 overdueTitle
                 debtTitle

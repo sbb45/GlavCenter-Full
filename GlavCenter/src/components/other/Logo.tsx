@@ -37,7 +37,7 @@ const Logo = () => {
                     alt={`Logo`}
                     style={{ height: "auto" }}
                 />
-                <h2>ГЛАВЦЕНТЕР</h2>
+                <h2>ГЛАВЦЕНТР</h2>
             </LogoWrapper>
         </Link>
     );

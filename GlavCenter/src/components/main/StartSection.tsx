@@ -33,7 +33,7 @@ const Title = styled.h1`
     font-weight: 700;
     line-height: 1;
     color: ${headingColor};
-    margin: 10vh 0 2rem;
+    margin: 0 0 2rem;
     @media (max-width: 470px) {
         font-size: calc(40px + 3vw);
     }
@@ -116,7 +116,6 @@ const StartSection: React.FC<StartSectionProps> = ({ content, services}) => {
     return (
         <Section>
             <ContentLeft>
-                <CalculatorSection />
                 <Title>{content?.title || title}</Title>
 
                 <Cards>

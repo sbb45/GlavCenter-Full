@@ -6,15 +6,14 @@ import {headingColor} from "@/styles/colors";
 
 const WrapperCalculator = styled.div`
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: start;
     width: 100%;
-    margin-top: 80px;
+    margin: 140px 0 80px;
     gap: 40px;
     
     @media (max-width: 1500px) {
         gap: 32px;
-        margin-top: 80px;
     }
     
     @media (max-width: 1300px) {
@@ -22,18 +21,18 @@ const WrapperCalculator = styled.div`
         justify-content: center;
         align-items: center;
         gap: 24px;
-        margin-top: 60px;
+        margin: 120px 0 80px;
     }
     
     @media (max-width: 768px) {
         gap: 20px;
-        margin-top: 70px;
+        margin-top: 120px;
         padding: 0 16px;
     }
     
     @media (max-width: 480px) {
         gap: 32px;
-        margin-top: 70px;
+        margin-top: 90px;
         padding: 0 12px;
     }
 `
@@ -44,30 +43,41 @@ const TextCalculator = styled.div`
     flex-direction: column;
     gap: 16px;
     flex: 1;
-    max-width: 600px;
+    max-width: 700px;
     
     h2{
         color: ${headingColor};
         font-weight: 700;
-        font-size: calc(20px + 1vw);
-        width: 70%;
+        font-size: calc(32px + 2vw);
+        width: 100%;
+        line-height: 1.2;
+        margin: 0 0 24px;
+    }
+    h3{
+        color: ${headingColor};
+        font-weight: 400;
+        font-size: calc(24px + 1vw);
+        width: 100%;
+        line-height: 1.1;
+        margin: 0 0 54px;
+    }
+    p{
+        color: ${headingColor};
+        font-weight: 100;
+        font-size: calc(18px + .4vw);
+        width: 100%;
         line-height: 1;
         margin: 0;
     }
     
     @media (max-width: 1500px) {
         gap: 10px;
-        max-width: 550px;
+        max-width: 600px;
         
-        h2{
-            width: 100%;
-            font-size: calc(20px + 0.8vw);   
-        }
     }
     
     @media (max-width: 1300px) {
         gap: 8px;
-        max-width: 100%;
         text-align: center;
         align-items: center;
         width: 100%;
@@ -75,6 +85,7 @@ const TextCalculator = styled.div`
     
     @media (max-width: 768px) {
         gap: 4px;
+        
         
     }
     
@@ -87,8 +98,9 @@ const CalculatorSection = () => {
     return (
         <WrapperCalculator>
             <TextCalculator>
-                <h2>Спишем ваши долги законно с гарантией под ключ</h2>
-                <h2>Узнайте сколько Вы сможете погасить с нашей помощью!</h2>
+                <h2>Законное списание долгов с гарантией под ключ</h2>
+                <h3>Узнайте подходите ли Вы под процедуру списания по 127-Ф3?</h3>
+                <p>Заполните калькулятор и узнайте результат за 5 секунд!</p>
             </TextCalculator>
             <Calculator />
         </WrapperCalculator>
