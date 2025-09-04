@@ -45,6 +45,7 @@ export const lists: Lists = {
         fields: {
             name: text({ validation: { isRequired: true }, label: 'Имя' }),
             email: text({ validation: { isRequired: true }, isIndexed: 'unique', label: 'Электронная почта' }),
+            image: image({ storage: 'my_local_images', label: 'Изображение' }),
             password: password({ validation: { isRequired: true }, label: 'Пароль' }),
             posts: relationship({ ref: 'Post.author', many: true, label: 'Посты пользователя' }),
             createdAt: timestamp({ defaultValue: { kind: 'now' }, label: 'Создано' }),
@@ -102,6 +103,11 @@ export const lists: Lists = {
                 dividers: true,
                 label: 'Контент',
             }),
+            Categories: json({
+                defaultValue: ["Пример 1", "Пример 2"],
+                label: 'Категории'
+            }),
+            views: integer({ defaultValue: 0 }),
             image: image({ storage: 'my_local_images', label: 'Изображение' }),
             author: relationship({ ref: 'User.posts', many: false, label: 'Автор' }),
             createdAt: timestamp({ defaultValue: { kind: 'now' }, label: 'Создано' }),
