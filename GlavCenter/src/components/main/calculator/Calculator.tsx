@@ -25,7 +25,7 @@ const WrapperCalculator = styled.form`
         margin-top: 12px;
     }
     @media (max-width: 700px) {
-        margin-bottom: 64px;
+        margin-bottom: 24px;
     }
     @media (max-width: 560px) {
         width: 100vw;

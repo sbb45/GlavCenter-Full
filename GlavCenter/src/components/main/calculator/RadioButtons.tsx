@@ -24,14 +24,6 @@ const RadioGroup = styled.div`
     @media (max-width: 1550px) {
         width: 26rem;
     }
-    @media (max-width: 1400px) {
-        grid-template-columns: repeat(2, 1fr);
-        width: 100%;
-    }
-    @media (max-width: 1300px) {
-        width: 30rem;
-        grid-template-columns: repeat(3, 1fr);
-    }
     @media (max-width: 560px) {
         width: 100%;
         grid-template-columns: repeat(2, 1fr);

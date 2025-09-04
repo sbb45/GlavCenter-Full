@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
+import Script from "next/script"; // 👈 добавили
 import "../styles/reset.css";
 import Header from "@/components/controlls/Header";
 import Footer from "@/components/controlls/Footer";
 import ModalProvider from "@/providers/ModalProvider";
+import StartupLoading from "@/providers/LoadingProvider";
 import Modal from "@/components/other/Modal";
 
 const RobotoFont = Roboto({
@@ -18,7 +20,7 @@ export const metadata: Metadata = {
     description:
         "ГлавЦентр — услуги по банкротству физических лиц. Мы помогаем списывать долги, сохранять имущество и решать финансовые проблемы. Более 20 000 счастливых клиентов.",
     creator: "ГлавЦентр",
-    metadataBase: new URL('https://glavcentr.ru'),
+    metadataBase: new URL("https://glavcentr.ru"),
     publisher: "ГлавЦентр",
     keywords:
         "банкротство, физические лица, долги, списание долгов, юридические услуги, помощь в банкротстве, финансовые проблемы, юристы",
@@ -55,9 +57,9 @@ export const metadata: Metadata = {
     },
 };
 
-
 import { fetchKeystoneSafe } from "@/lib/keystone";
 import { DEFAULT_HEADER, DEFAULT_FOOTER } from "@/lib/defaultData";
+import CookieConsentProvider from "@/providers/CookieConsentProvider";
 
 async function fetchInformation() {
     const query = `
@@ -78,20 +80,57 @@ async function fetchInformation() {
     return result.component;
 }
 
-// Async RootLayout с безопасным fetch данных
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
     const info = await fetchInformation();
-    console.log(info);
 
     return (
         <html lang="ru">
         <body className={RobotoFont.variable}>
         <ModalProvider>
-            <Header info={info?.content?.header} />
-            {children}
-            <Footer info={info?.content?.footer} />
-            <Modal />
+            <CookieConsentProvider>
+                <StartupLoading />
+                <Header info={info?.content?.header} />
+                {children}
+                <Footer info={info?.content?.footer} />
+                <Modal />
+            </CookieConsentProvider>
         </ModalProvider>
+
+        {/* Яндекс.Метрика */}
+        <Script id="yandex-metrika" strategy="afterInteractive">
+            {`
+                        (function(m,e,t,r,i,k,a){
+                            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+                            m[i].l=1*new Date();
+                            for (var j = 0; j < document.scripts.length; j++) { 
+                                if (document.scripts[j].src === r) { return; }
+                            }
+                            k=e.createElement(t),
+                            a=e.getElementsByTagName(t)[0],
+                            k.async=1,
+                            k.src=r,
+                            a.parentNode.insertBefore(k,a)
+                        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js', 'ym');
+
+                        ym(104008354, 'init', {
+                            ssr:true,
+                            webvisor:true,
+                            clickmap:true,
+                            ecommerce:"dataLayer",
+                            accurateTrackBounce:true,
+                            trackLinks:true
+                        });
+                    `}
+        </Script>
+        <noscript>
+            <div>
+                <img
+                    src="https://mc.yandex.ru/watch/104008354"
+                    style={{ position: "absolute", left: "-9999px" }}
+                    alt=""
+                />
+            </div>
+        </noscript>
         </body>
         </html>
     );

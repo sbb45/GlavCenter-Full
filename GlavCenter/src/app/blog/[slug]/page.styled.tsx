@@ -10,20 +10,19 @@ export const BlogContainer = styled.div`
   border-radius: 24px;
   
   @media (max-width: 1024px) {
-    margin: 80px auto;
+    margin: 120px auto;
     padding: 1.5rem;
     border-radius: 16px;
   }
   
   @media (max-width: 768px) {
-    margin: 40px auto;
+    margin: 100px auto;
     padding: 1rem;
     border-radius: 12px;
     max-width: 95%;
   }
   
   @media (max-width: 480px) {
-    margin: 20px auto;
     padding: 0.75rem;
     border-radius: 8px;
     max-width: 98%;
@@ -184,6 +183,9 @@ export const BackButton = styled.button`
 export const BlogContact = styled.form`
     margin: 2rem auto;
     width: 70%;
+    input{
+      height: 58px;
+    }
     
     @media (max-width: 1024px) {
         width: 85%;

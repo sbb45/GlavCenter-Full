@@ -62,6 +62,9 @@ const FooterInfoBlock = styled.div`
         font-weight: 400;
         font-size: 18px;
     }
+    a{
+        color: ${lightTextColor};
+    }
 `
 const FooterLine = styled.hr`
     width: 100%;

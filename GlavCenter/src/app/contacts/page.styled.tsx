@@ -60,6 +60,9 @@ export const ContactForm = styled.form`
     }
     @media (max-width: 1300px) {
         order: 1;
+        div{
+            width: 100%;
+        }
     }
     @media (max-width: 500px) {
         padding: 1.5rem 1rem;

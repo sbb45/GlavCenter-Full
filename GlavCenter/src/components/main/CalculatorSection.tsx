@@ -7,9 +7,12 @@ import {headingColor} from "@/styles/colors";
 const WrapperCalculator = styled.div`
     display: flex;
     justify-content: center;
-    align-items: start;
+    align-items: center;
     width: 100%;
-    margin: 140px 0 80px;
+    min-height: 750px;
+    height: calc(100vh - 100px);
+
+    margin: 100px 0 80px;
     gap: 40px;
     
     @media (max-width: 1500px) {
@@ -22,11 +25,12 @@ const WrapperCalculator = styled.div`
         align-items: center;
         gap: 24px;
         margin: 120px 0 80px;
+        height: 100%;
     }
     
     @media (max-width: 768px) {
         gap: 20px;
-        margin-top: 120px;
+        margin: 120px 0 20px;
         padding: 0 16px;
     }
     
@@ -85,8 +89,12 @@ const TextCalculator = styled.div`
     
     @media (max-width: 768px) {
         gap: 4px;
-        
-        
+        h3{
+            margin: 0 0 12px;
+        }
+        h4{
+            margin: 0 0 6px;
+        }
     }
     
     @media (max-width: 480px) {

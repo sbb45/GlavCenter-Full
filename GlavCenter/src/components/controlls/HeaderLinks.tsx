@@ -44,6 +44,9 @@ const HeaderLinks = ({footer}: {footer?:boolean}) => {
                 <Link href='/services'>Услуги</Link>
                 <Link href='/contacts'>Контакты</Link>
                 <Link href='/blog'>Блог</Link>
+                {footer ? (
+                    <Link target="_blank" href='https://docs.google.com/document/d/1fmczwk_G4J-nUB6SjF5SQCzy2Kcb68Hvb43EjF2hE_Y/edit?tab=t.0#heading=h.445wxmcfzj8q'>Политика конфиденциальности</Link>
+                ): null}
             </Links>
         </WrapperLinks>
     );
