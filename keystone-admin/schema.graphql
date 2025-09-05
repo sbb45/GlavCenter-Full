@@ -5,10 +5,27 @@ type User {
   id: ID!
   name: String
   email: String
+  image: ImageFieldOutput
   password: PasswordState
   posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   postsCount(where: PostWhereInput! = {}): Int
   createdAt: DateTime
+}
+
+type ImageFieldOutput {
+  id: ID!
+  filesize: Int!
+  width: Int!
+  height: Int!
+  extension: ImageExtension!
+  url: String!
+}
+
+enum ImageExtension {
+  jpg
+  png
+  webp
+  gif
 }
 
 type PasswordState {
@@ -104,10 +121,18 @@ enum OrderDirection {
 input UserUpdateInput {
   name: String
   email: String
+  image: ImageFieldInput
   password: String
   posts: PostRelateToManyForUpdateInput
   createdAt: DateTime
 }
+
+input ImageFieldInput {
+  upload: Upload!
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 input PostRelateToManyForUpdateInput {
   disconnect: [PostWhereUniqueInput!]
@@ -124,6 +149,7 @@ input UserUpdateArgs {
 input UserCreateInput {
   name: String
   email: String
+  image: ImageFieldInput
   password: String
   posts: PostRelateToManyForCreateInput
   createdAt: DateTime
@@ -219,6 +245,8 @@ type Post {
   title: String
   description: String
   content: Post_content_Document
+  categories: JSON
+  views: Int
   image: ImageFieldOutput
   author: User
   createdAt: DateTime
@@ -226,22 +254,6 @@ type Post {
 
 type Post_content_Document {
   document(hydrateRelationships: Boolean! = false): JSON!
-}
-
-type ImageFieldOutput {
-  id: ID!
-  filesize: Int!
-  width: Int!
-  height: Int!
-  extension: ImageExtension!
-  url: String!
-}
-
-enum ImageExtension {
-  jpg
-  png
-  webp
-  gif
 }
 
 input PostWhereUniqueInput {
@@ -255,6 +267,7 @@ input PostWhereInput {
   id: IDFilter
   title: StringFilter
   description: StringFilter
+  views: IntNullableFilter
   author: UserWhereInput
   createdAt: DateTimeNullableFilter
 }
@@ -263,6 +276,7 @@ input PostOrderByInput {
   id: OrderDirection
   title: OrderDirection
   description: OrderDirection
+  views: OrderDirection
   createdAt: OrderDirection
 }
 
@@ -270,17 +284,12 @@ input PostUpdateInput {
   title: String
   description: String
   content: JSON
+  categories: JSON
+  views: Int
   image: ImageFieldInput
   author: UserRelateToOneForUpdateInput
   createdAt: DateTime
 }
-
-input ImageFieldInput {
-  upload: Upload!
-}
-
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
 
 input UserRelateToOneForUpdateInput {
   create: UserCreateInput
@@ -297,6 +306,8 @@ input PostCreateInput {
   title: String
   description: String
   content: JSON
+  categories: JSON
+  views: Int
   image: ImageFieldInput
   author: UserRelateToOneForCreateInput
   createdAt: DateTime

@@ -6,7 +6,7 @@
 // - https://keystonejs.com/docs/config/lists
 
 import { list } from '@keystone-6/core'
-import { allowAll } from '@keystone-6/core/access'
+import {allowAll, denyAll} from '@keystone-6/core/access'
 
 // see https://keystonejs.com/docs/fields/overview for the full list of fields
 //   this is a few common fields for an example
@@ -32,7 +32,14 @@ export const lists: Lists = {
     // Раздел: Пользователи
     // ========================
     User: list({
-        access: allowAll,
+        access: {
+            operation: {
+                query: allowAll,
+                create: ({ session }) => !!session,
+                update: ({ session }) => !!session,
+                delete: ({ session }) => !!session,
+            },
+        },
         ui: {
             labelField: 'name',
             listView: {
@@ -53,7 +60,14 @@ export const lists: Lists = {
     }),
 
     Client: list({
-        access: allowAll,
+        access: {
+            operation: {
+                query: ({ session }) => !!session,
+                create: allowAll,
+                update: ({ session }) => !!session,
+                delete: ({ session }) => !!session,
+            },
+        },
         ui: {
             labelField: 'name',
             listView: {
@@ -78,7 +92,14 @@ export const lists: Lists = {
     // Раздел: Наполнение сайта
     // ========================
     Post: list({
-        access: allowAll,
+        access: {
+            operation: {
+                query: allowAll,
+                create: ({ session }) => !!session,
+                update: allowAll,
+                delete: ({ session }) => !!session,
+            },
+        },
         ui: {
             labelField: 'title',
             description: 'Посты на сайте',
@@ -103,11 +124,16 @@ export const lists: Lists = {
                 dividers: true,
                 label: 'Контент',
             }),
-            Categories: json({
+            categories: json({
                 defaultValue: ["Пример 1", "Пример 2"],
                 label: 'Категории'
             }),
-            views: integer({ defaultValue: 0 }),
+            views: integer({
+                defaultValue: 0,
+                access: {
+                    update: allowAll,
+                },
+            }),
             image: image({ storage: 'my_local_images', label: 'Изображение' }),
             author: relationship({ ref: 'User.posts', many: false, label: 'Автор' }),
             createdAt: timestamp({ defaultValue: { kind: 'now' }, label: 'Создано' }),
@@ -115,7 +141,14 @@ export const lists: Lists = {
     }),
 
     Component: list({
-        access: allowAll,
+        access: {
+            operation: {
+                query: allowAll,
+                create: ({ session }) => !!session,
+                update: ({ session }) => !!session,
+                delete: denyAll,
+            },
+        },
         ui: {
             labelField: 'title',
             description: 'Компоненты страниц',
@@ -133,7 +166,14 @@ export const lists: Lists = {
     }),
 
     Review: list({
-        access: allowAll,
+        access: {
+            operation: {
+                query: allowAll,
+                create: ({ session }) => !!session,
+                update: ({ session }) => !!session,
+                delete: ({ session }) => !!session,
+            },
+        },
         ui: {
             labelField: 'createdAt',
             description: 'Отзывы пользователей',
@@ -155,7 +195,14 @@ export const lists: Lists = {
         },
     }),
     Advantage: list({
-        access: allowAll,
+        access: {
+            operation: {
+                query: allowAll,
+                create: ({ session }) => !!session,
+                update: ({ session }) => !!session,
+                delete: ({ session }) => !!session,
+            },
+        },
         ui: {
             labelField: 'title',
             description: 'Преимущества работы с нами',
@@ -177,7 +224,14 @@ export const lists: Lists = {
         },
     }),
     Service: list({
-        access: allowAll,
+        access: {
+            operation: {
+                query: allowAll,
+                create: ({ session }) => !!session,
+                update: ({ session }) => !!session,
+                delete: ({ session }) => !!session,
+            },
+        },
         ui: {
             labelField: 'title',
             description: 'Услуги',
@@ -200,7 +254,14 @@ export const lists: Lists = {
     }),
 
     Calculator: list({
-        access: allowAll,
+        access: {
+            operation: {
+                query: allowAll,
+                create: ({ session }) => !!session,
+                update: ({ session }) => !!session,
+                delete: ({ session }) => !!session,
+            },
+        },
         ui: {
             labelField: 'title',
             description: 'Настройки калькулятора',
@@ -220,73 +281,73 @@ export const lists: Lists = {
                 defaultValue: 'inactive',
                 label: 'Статус'
             }),
-            
+
             // Заголовки
-            overdueTitle: text({ 
-                defaultValue: 'Имеются ли просрочки?', 
-                label: 'Заголовок вопроса о просрочках' 
+            overdueTitle: text({
+                defaultValue: 'Имеются ли просрочки?',
+                label: 'Заголовок вопроса о просрочках'
             }),
-            debtTitle: text({ 
-                defaultValue: 'Сумма долга', 
-                label: 'Заголовок поля суммы долга' 
+            debtTitle: text({
+                defaultValue: 'Сумма долга',
+                label: 'Заголовок поля суммы долга'
             }),
-            paymentTitle: text({ 
-                defaultValue: 'Месячный платёж', 
-                label: 'Заголовок поля месячного платежа' 
+            paymentTitle: text({
+                defaultValue: 'Месячный платёж',
+                label: 'Заголовок поля месячного платежа'
             }),
-            whoOwesTitle: text({ 
-                defaultValue: 'Перед кем долги?', 
-                label: 'Заголовок вопроса о кредиторах' 
+            whoOwesTitle: text({
+                defaultValue: 'Перед кем долги?',
+                label: 'Заголовок вопроса о кредиторах'
             }),
-            
+
             // Максимальные значения для range
-            debtMax: integer({ 
-                defaultValue: 1000000, 
-                label: 'Максимальная сумма долга (в рублях)' 
+            debtMax: integer({
+                defaultValue: 1000000,
+                label: 'Максимальная сумма долга (в рублях)'
             }),
-            paymentMax: integer({ 
-                defaultValue: 40000, 
-                label: 'Максимальный месячный платёж (в рублях)' 
+            paymentMax: integer({
+                defaultValue: 40000,
+                label: 'Максимальный месячный платёж (в рублях)'
             }),
-            
+
             // Варианты просрочек
-            overdueOptions: json({ 
+            overdueOptions: json({
                 defaultValue: ["<1 месяца", ">1 месяца", ">6 месяцев", ">1 года", "Плачу вовремя"],
-                label: 'Варианты ответов о просрочках (массив строк)' 
+                label: 'Варианты ответов о просрочках (массив строк)'
             }),
-            
+
             // Варианты кредиторов
-            whoOwesOptions: json({ 
+            whoOwesOptions: json({
                 defaultValue: ["МФО", "Штрафы", "Налоги", "Банки", "ЖКХ", "Другой вариант"],
-                label: 'Варианты кредиторов (массив строк)' 
+                label: 'Варианты кредиторов (массив строк)'
             }),
-            
+
             // Тексты кнопок и модального окна
-            submitButtonText: text({ 
-                defaultValue: 'Расчитать стоимость', 
-                label: 'Текст кнопки отправки' 
+            submitButtonText: text({
+                defaultValue: 'Расчитать стоимость',
+                label: 'Текст кнопки отправки'
             }),
-            modalTitle: text({ 
-                defaultValue: 'Поздравляем!', 
-                label: 'Заголовок модального окна' 
+            modalTitle: text({
+                defaultValue: 'Поздравляем!',
+                label: 'Заголовок модального окна'
             }),
-            modalSubtitle: text({ 
-                defaultValue: 'Вы сможете списать свои задолженности по закону', 
-                label: 'Подзаголовок модального окна' 
+            modalSubtitle: text({
+                defaultValue: 'Вы сможете списать свои задолженности по закону',
+                label: 'Подзаголовок модального окна'
             }),
-            modalDescription: text({ 
-                defaultValue: 'Наш специалист расскажет подробности по телефону', 
-                label: 'Описание в модальном окне' 
+            modalDescription: text({
+                defaultValue: 'Наш специалист расскажет подробности по телефону',
+                label: 'Описание в модальном окне'
             }),
-            modalInstruction: text({ 
-                defaultValue: 'От вас потребуется Номер телефона и Имя', 
-                label: 'Инструкция в модальном окне' 
+            modalInstruction: text({
+                defaultValue: 'От вас потребуется Номер телефона и Имя',
+                label: 'Инструкция в модальном окне'
             }),
-            modalSubmitText: text({ 
-                defaultValue: 'Отправить заявку', 
-                label: 'Текст кнопки отправки в модальном окне' 
+            modalSubmitText: text({
+                defaultValue: 'Отправить заявку',
+                label: 'Текст кнопки отправки в модальном окне'
             }),
-            
+
             createdAt: timestamp({ defaultValue: { kind: 'now' }, label: 'Создано' }),
         },
     }),
