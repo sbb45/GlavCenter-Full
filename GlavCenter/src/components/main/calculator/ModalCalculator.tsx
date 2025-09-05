@@ -2,8 +2,11 @@ import React, {ChangeEvent, FormEvent, useState} from 'react';
 import StyledInput from "@/components/other/StyledInput";
 import SubmitBtn from "@/components/other/SubmitBtn";
 import styled from "styled-components";
-import {lightTextColor, primaryColor, textGrayColor} from "@/styles/colors";
+import {primaryColor, textGrayColor} from "@/styles/colors";
 import {router} from "next/client";
+import {useRouter} from "next/navigation";
+import EmailTemplate from "@/components/other/EmailTemplate";
+import {renderToStaticMarkup} from "react-dom/server";
 
 const ModalForm = styled.form`
     display: flex;
@@ -51,6 +54,7 @@ interface CalculatorConfig {
 const ModalCalculator = ({close, config}: {close: () => void, config: CalculatorConfig}) => {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
+    const router = useRouter();
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -58,6 +62,20 @@ const ModalCalculator = ({close, config}: {close: () => void, config: Calculator
         if (calculatorReq) {
             const { overdue, debt, payment, whoOwes } = JSON.parse(calculatorReq);
 
+            const htmlContent = `
+              <p><b>Имя:</b> ${name}</p>
+              <p><b>Телефон:</b> ${phone}</p>
+              <p><b>Просрочка:</b> ${overdue}</p>
+              <p><b>Сумма долга:</b> ${debt}</p>
+              <p><b>Месячный платёж:</b> ${payment}</p>
+              <p><b>Кому должен:</b> ${whoOwes}</p>
+            `;
+
+            const emailHtml = renderToStaticMarkup(
+                <EmailTemplate title="Новая заявка с сайта" content={htmlContent} />
+            );
+
+            // Отправка на бек
             await fetch('/api/clients/calculator-result', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -71,9 +89,21 @@ const ModalCalculator = ({close, config}: {close: () => void, config: Calculator
 
                 })
             })
+
+            close()
+            router.push('/thanks')
+            // Отправка на почту
+            await fetch("/api/send-email", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    to: "glavcentrekb25@gmail.com",
+                    subject: "Заявка с калькулятора",
+                    html: emailHtml,
+                }),
+            });
             setName('')
             setPhone('')
-            close()
         }else {
             location.reload()
         }

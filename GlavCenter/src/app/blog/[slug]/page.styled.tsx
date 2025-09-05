@@ -1,4 +1,4 @@
-import { primaryColor, primaryHoverColor } from '@/styles/colors';
+import {bgLightColor, lightTextColor, primaryColor, primaryHoverColor, textGrayColor} from '@/styles/colors';
 import styled from 'styled-components';
 
 export const BlogContainer = styled.div`
@@ -30,10 +30,14 @@ export const BlogContainer = styled.div`
 `;
 
 export const BlogHeader = styled.div`
-  text-align: center;
-  margin-bottom: 3rem;
-  padding-bottom: 2rem;
-  border-bottom: 2px solid #f3f4f6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2rem 0 3rem;
+    border-bottom: 2px solid #f3f4f6;
+
   
   @media (max-width: 768px) {
     margin-bottom: 2rem;
@@ -43,9 +47,49 @@ export const BlogHeader = styled.div`
   @media (max-width: 480px) {
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
+      flex-direction: column;
   }
 `;
-
+export const Author = styled.div`
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 12px;
+    img{
+        border-radius: 50%;
+    }
+    p{
+        font-size: calc(14px + .4vw);
+    }
+    width: 20%;
+    @media (max-width: 700px) {
+        flex-direction: column;
+        align-items: start;
+    }
+    @media (max-width: 480px) {
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+`
+export const InfoPost = styled.div`
+    width: 20%;
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    flex-direction: column;
+    gap: 12px;
+    h4{
+        font-size: calc(10px + .4vw);
+        color: ${textGrayColor};
+    }
+    @media (max-width: 480px) {
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        margin-top: 12px;
+    }
+`
 export const BlogTitle = styled.h1`
   font-size: 3rem;
   font-weight: 700;
@@ -136,7 +180,7 @@ export const LoadingContainer = styled.div`
   align-items: center;
   min-height: 400px;
   font-size: 1.2rem;
-  color: #6b7280;
+  color: ${textGrayColor};
 `;
 
 export const ErrorContainer = styled.div`
@@ -145,10 +189,36 @@ export const ErrorContainer = styled.div`
   color: #dc2626;
   font-size: 1.1rem;
 `;
-
+export const HeaderContainer = styled.div`
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 2rem;
+    div{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+    }
+    @media (max-width: 768px) {
+        margin-bottom: 1.5rem;
+    }
+    @media (max-width: 480px) {
+        margin-bottom: 1rem;
+        flex-direction: column;
+    }
+    h4{
+        background-color: ${bgLightColor};
+        border-radius: 24px;
+        font-size: calc(10px + .4vw);
+        padding: 6px 12px;
+        color: ${textGrayColor};
+    }
+`
 export const BackButton = styled.button`
   background: ${primaryColor};
-  color: white;
+  color: ${lightTextColor};
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
@@ -156,18 +226,15 @@ export const BackButton = styled.button`
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s;
-  margin-bottom: 2rem;
   
   @media (max-width: 768px) {
     padding: 0.625rem 1.25rem;
     font-size: 0.9rem;
-    margin-bottom: 1.5rem;
   }
   
   @media (max-width: 480px) {
     padding: 0.5rem 1rem;
     font-size: 0.8rem;
-    margin-bottom: 1rem;
     width: 100%;
     text-align: center;
   }
@@ -181,7 +248,7 @@ export const BackButton = styled.button`
   }
 `;
 export const BlogContact = styled.form`
-    margin: 2rem auto;
+    margin: 4rem auto;
     width: 70%;
     input{
       height: 58px;
@@ -189,12 +256,12 @@ export const BlogContact = styled.form`
     
     @media (max-width: 1024px) {
         width: 85%;
-        margin: 1.5rem auto;
+        margin: 2.5rem auto;
     }
     
     @media (max-width: 768px) {
         width: 95%;
-        margin: 1.25rem auto;
+        margin: 2.25rem auto;
     }
     
     @media (max-width: 480px) {

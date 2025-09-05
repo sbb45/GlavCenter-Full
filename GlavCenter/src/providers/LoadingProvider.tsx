@@ -7,9 +7,16 @@ export default function StartupLoading() {
     const [visible, setVisible] = useState(true);
 
     useEffect(() => {
-        document.body.style.overflowY = "none";
-        const t = setTimeout(()=> setVisible(false), 1000);
-        return () => clearTimeout(t);
+        const prevOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        const t = setTimeout(()=> {
+            setVisible(false);
+            document.body.style.overflow = prevOverflow;
+        }, 800);
+        return () => {
+            clearTimeout(t);
+            document.body.style.overflow = prevOverflow;
+        };
     }, []);
 
     if(!visible) return null;

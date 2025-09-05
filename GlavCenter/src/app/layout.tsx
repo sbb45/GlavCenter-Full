@@ -60,6 +60,7 @@ export const metadata: Metadata = {
 import { fetchKeystoneSafe } from "@/lib/keystone";
 import { DEFAULT_HEADER, DEFAULT_FOOTER } from "@/lib/defaultData";
 import CookieConsentProvider from "@/providers/CookieConsentProvider";
+import StyledComponentsRegistry from "@/lib/styledComponentsRegistry";
 
 async function fetchInformation() {
     const query = `
@@ -86,41 +87,30 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     return (
         <html lang="ru">
         <body className={RobotoFont.variable}>
-        <ModalProvider>
-            <CookieConsentProvider>
-                <StartupLoading />
-                <Header info={info?.content?.header} />
-                {children}
-                <Footer info={info?.content?.footer} />
-                <Modal />
-            </CookieConsentProvider>
-        </ModalProvider>
+        <StyledComponentsRegistry>
+            <ModalProvider>
+                <CookieConsentProvider>
+                    <StartupLoading />
+                    <Header info={info?.content?.header} />
+                    {children}
+                    <Footer info={info?.content?.footer} />
+                    <Modal />
+                </CookieConsentProvider>
+            </ModalProvider>
+        </StyledComponentsRegistry>
 
         {/* Яндекс.Метрика */}
         <Script id="yandex-metrika" strategy="afterInteractive">
             {`
-                        (function(m,e,t,r,i,k,a){
-                            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-                            m[i].l=1*new Date();
-                            for (var j = 0; j < document.scripts.length; j++) { 
-                                if (document.scripts[j].src === r) { return; }
-                            }
-                            k=e.createElement(t),
-                            a=e.getElementsByTagName(t)[0],
-                            k.async=1,
-                            k.src=r,
-                            a.parentNode.insertBefore(k,a)
-                        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js', 'ym');
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=104008354', 'ym');
 
-                        ym(104008354, 'init', {
-                            ssr:true,
-                            webvisor:true,
-                            clickmap:true,
-                            ecommerce:"dataLayer",
-                            accurateTrackBounce:true,
-                            trackLinks:true
-                        });
-                    `}
+    ym(104008354, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+            `}
         </Script>
         <noscript>
             <div>

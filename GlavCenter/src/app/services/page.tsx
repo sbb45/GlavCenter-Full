@@ -3,6 +3,7 @@ import { ServicesContent, ServiceWrapper } from "@/app/services/page.styled";
 import RichTextRenderer from "@/components/RichTextRenderer";
 import { fetchKeystoneSafe } from "@/lib/keystone";
 import { DEFAULT_SERVICES } from "@/lib/defaultData";
+import type { Metadata } from 'next';
 
 interface Service {
     id: string;
@@ -38,6 +39,16 @@ export default async function Services() {
 
     return (
         <IndexWrapper>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify({
+                    '@context': 'https://schema.org',
+                    '@type': 'Service',
+                    name: 'Юридические услуги по банкротству',
+                    provider: { '@type': 'Organization', name: 'ГлавЦентр' },
+                    areaServed: 'RU',
+                }) }}
+            />
             <ServicesContent>
                 <h2>Услуги</h2>
                 {services.map((service, index) => (

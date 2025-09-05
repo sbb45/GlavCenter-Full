@@ -4,6 +4,7 @@ import {bgColor, blackColor, headingColor} from "@/styles/colors";
 import Link from "next/link";
 
 export const ThanksContent = styled.div`
+    margin-top: 100px;
     background-color: black;
     min-height: 100vh;
     display: flex;

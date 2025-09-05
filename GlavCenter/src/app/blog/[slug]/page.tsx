@@ -1,158 +1,78 @@
-'use client'
+import { Metadata } from 'next';
+import { headers } from 'next/headers';
+import ClientPost from './ClientPost';
 
-import {FormEvent, useEffect, useState} from 'react';
-import Image from 'next/image';
-import { useParams, useRouter } from 'next/navigation';
-import RichTextRenderer from '@/components/RichTextRenderer';
-import {
-    BlogContainer,
-    BlogHeader,
-    BlogTitle,
-    BlogDescription,
-    BlogImage,
-    BlogContent,
-    LoadingContainer,
-    ErrorContainer,
-    BackButton, BlogContact
-} from './page.styled';
-import StyledInput from "@/components/other/StyledInput";
-import SubmitBtn from "@/components/other/SubmitBtn";
+type Params = { slug: string };
 
-interface PostType {
-    id: string;
-    title: string;
-    description: string;
-    image?: { id: string; url: string };
-    content?: { document: any };
+async function getBaseUrl() {
+    const h: any = await (headers() as any);
+    const host = h.get('x-forwarded-host') || h.get('host') || '';
+    const proto = h.get('x-forwarded-proto') || 'http';
+    if (!host) return '';
+    return `${proto}://${host}`;
 }
 
-export default function PostPage() {
-    const [post, setPost] = useState<PostType | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const params = useParams();
-    const router = useRouter();
-    const id = params?.slug;
-
-    const [name, setName] = useState("");
-    const [phone, setPhone] = useState("");
-    const [windowWidth, setWindowWidth] = useState(0);
-
-    useEffect(() => {
-        const handleResize = () => setWindowWidth(window.innerWidth);
-        handleResize(); // Set initial width
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-
-    // Отправка данных
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-
-        const res = await fetch('/api/clients/create-client', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                name: name,
-                phone: phone,
-            })
-        })
-        console.log(res)
-        setName('')
-        setPhone('')
-    }
-
-    useEffect(() => {
-        const fetchPost = async () => {
-            try {
-                setLoading(true);
-                setError(null);
-                
-                const res = await fetch(`/api/posts/get-one?id=${id}`);
-                if (!res.ok) {
-                    throw new Error('Failed to fetch post');
-                }
-                
+async function fetchPost(slug: string) {
+    const baseUrl = await getBaseUrl();
+    const url = baseUrl ? `${baseUrl}/api/posts/get-one?id=${slug}` : `/api/posts/get-one?id=${slug}`;
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) return null;
                 const data = await res.json();
-                setPost(data.post);
-            } catch (err) {
-                console.error('Error fetching post:', err);
-                setError('Ошибка при загрузке статьи');
-            } finally {
-                setLoading(false);
-            }
-        };
+    return data?.post || null;
+}
 
-        if (id) {
-            fetchPost();
-        }
-    }, [id]);
+export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+    const post = await fetchPost(params.slug);
+    const baseUrl = await getBaseUrl();
+    const url = baseUrl ? `${baseUrl}/blog/${params.slug}` : undefined;
+    const title = post?.title ? `${post.title} | ГлавЦентр Банкротство` : 'Статья | ГлавЦентр Банкротство';
+    const description = post?.description || 'Юридическая помощь по банкротству физлиц и ИП. Бесплатная консультация.';
+    const ogImage = post?.image?.url ? `http://localhost:4000${post.image.url}` : '/logo.svg';
 
-    const handleBack = () => {
-        router.push('/blog');
+    return {
+        title,
+        description,
+        alternates: { canonical: url },
+        openGraph: {
+            title,
+            description,
+            url,
+            type: 'article',
+            images: ogImage ? [{ url: ogImage }] : undefined,
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title,
+            description,
+            images: ogImage ? [ogImage] : undefined,
+        },
     };
+}
 
-    if (loading) {
-        return (
-            <BlogContainer>
-                <LoadingContainer>
-                    Загрузка статьи...
-                </LoadingContainer>
-            </BlogContainer>
-        );
-    }
-
-    if (error || !post) {
-        return (
-            <BlogContainer>
-                <ErrorContainer>
-                    <h2>Ошибка</h2>
-                    <p>{error || 'Статья не найдена'}</p>
-                    <BackButton onClick={handleBack}>
-                        Вернуться к блогу
-                    </BackButton>
-                </ErrorContainer>
-            </BlogContainer>
-        );
-    }
+export default async function Page({ params }: { params: Params }) {
+    const post = await fetchPost(params.slug);
+    const baseUrl = await getBaseUrl();
+    const url = baseUrl ? `${baseUrl}/blog/${params.slug}` : '';
+    const jsonLd = post ? {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: post.title,
+        description: post.description,
+        author: post.author?.name ? { '@type': 'Person', name: post.author.name } : undefined,
+        datePublished: post.createdAt ? new Date(post.createdAt).toISOString() : undefined,
+        image: post.image?.url ? `http://localhost:4000${post.image.url}` : undefined,
+        mainEntityOfPage: url || undefined,
+    } : null;
 
     return (
-        <BlogContainer>
-            <BackButton onClick={handleBack}>
-                ← Вернуться к блогу
-            </BackButton>
-            
-            <BlogHeader>
-                <BlogTitle>{post.title}</BlogTitle>
-                <BlogDescription>Спишем ваши долги законно с гарантией под ключ</BlogDescription>
-            </BlogHeader>
-
-            <BlogContact onSubmit={handleSubmit}>
-                <h4>Запишитесь на бесплатную консультацию</h4>
-                <div>
-                    <StyledInput
-                        width={windowWidth > 768 ? 300 : undefined}
-                        placeholder={'Имя'}
-                        value={name}
-                        onChange={(e)=>setName(e.target.value)}
-                    />
-                    <StyledInput
-                        width={windowWidth > 768 ? 300 : undefined}
-                        placeholder={'Номер телефона'}
-                        inputType={'phone'}
-                        value={phone}
-                        onPhoneChange={setPhone}
-                    />
-                    <SubmitBtn value={'Записаться'} />
-                </div>
-            </BlogContact>
-
-            <BlogContent>
-                {post.content?.document && (
-                    <RichTextRenderer document={post.content.document} />
-                )}
-            </BlogContent>
-        </BlogContainer>
+        <>
+            {jsonLd && (
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+                />
+            )}
+            <ClientPost id={params.slug} />
+        </>
     );
 }

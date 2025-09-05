@@ -1,10 +1,12 @@
 'use client'
 import {IndexWrapper} from "@/app/page.styled";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import {ContactContent, ContactForm, ContactMap, ContactWrapper} from "@/app/contacts/page.styled";
 import StyledInput from "@/components/other/StyledInput";
 import SubmitBtn from "@/components/other/SubmitBtn";
 import 'react-phone-number-input/style.css';
+import {renderToStaticMarkup} from "react-dom/server";
+import EmailTemplate from "@/components/other/EmailTemplate";
 
 
 export default function Contacts() {
@@ -35,9 +37,28 @@ export default function Contacts() {
                 question: question,
             })
         })
+        const htmlContent = `
+              <p><b>Имя:</b> ${name}</p>
+              <p><b>Телефон:</b> ${phone}</p>
+              <p><b>Вопрос:</b> ${question}</p>
+            `;
+
+        const emailHtml = renderToStaticMarkup(
+            <EmailTemplate title="Новая заявка с сайта" content={htmlContent} />
+        );
         setName('')
         setPhone('')
         setQuestion('')
+        // Отправка на почту
+        await fetch("/api/send-email", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                to: "glavcentrekb25@gmail.com",
+                subject: "Заявка с контактов",
+                html: emailHtml,
+            }),
+        });
     }
     return (
         <IndexWrapper>

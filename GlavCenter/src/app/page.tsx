@@ -11,6 +11,7 @@ import {
 import Calculator from "@/components/main/calculator/Calculator";
 import CalculatorSection from "@/components/main/CalculatorSection";
 import React from "react";
+import type { Metadata } from 'next';
 
 // Получение данных страницы
 async function getPage() {
@@ -80,6 +81,16 @@ export default async function Home() {
 
     return (
         <IndexWrapper>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify({
+                    '@context': 'https://schema.org',
+                    '@type': 'Organization',
+                    name: 'ГлавЦентр',
+                    url: 'https://glavcentr.ru',
+                    sameAs: ['https://t.me/'],
+                }) }}
+            />
             <CalculatorSection />
             <StartSection
                 content={componentData.component?.content?.start}
