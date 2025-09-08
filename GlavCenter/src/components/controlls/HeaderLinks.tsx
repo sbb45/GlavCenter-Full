@@ -21,6 +21,7 @@ const Links = styled.ul<{$footer?: boolean}>`
     gap: 24px;
     a {
         color: ${({$footer})=> $footer ? lightTextColor : headingColor};
+        text-align:center;
         font-weight: 700;
         font-size: 20px;
         text-decoration: none;
@@ -34,6 +35,9 @@ const Links = styled.ul<{$footer?: boolean}>`
         color: ${({$footer})=> $footer ? lightTextColor : primaryColor};
         border-bottom: ${({$footer})=> $footer ? `2px solid ${lightTextColor}` : `2px solid ${primaryColor}`};
     }
+        @media (max-width: 700px){
+            flex-direction: column;
+        }
 `
 
 const HeaderLinks = ({footer}: {footer?:boolean}) => {

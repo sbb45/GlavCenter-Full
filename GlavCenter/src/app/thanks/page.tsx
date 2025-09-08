@@ -38,12 +38,12 @@ export default async function Thanks() {
                         />
                         <div>
                             <h2>Ух ты!</h2>
-                            <h2>Вам подарок от нашего деректора</h2>
+                            <h2>Вам подарок от нашего директора</h2>
                             <h3>Бесплатный курс на тему:</h3>
                         </div>
                         <p>САМОСТОЯТЕЛЬНОЕ СПИСАНИЕ ДОЛГОВ ПО ЗАКОНУ 127-ФЗ</p>
                     </Description>
-                    <LinkTelegram href={'tg'}>
+                    <LinkTelegram href={'https://t.me/glavcenter/91'}>
                         <Image
                             src={'/icons/telegram.png'}
                             alt={'present'}

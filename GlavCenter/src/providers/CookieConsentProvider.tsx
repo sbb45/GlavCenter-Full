@@ -11,15 +11,15 @@ type CookieConsent = {
 const CookieConsentContext = createContext<CookieConsent | undefined>(undefined);
 
 const CookieConsentProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [accepted, setAccepted] = useState(false);
+    const [accepted, setAccepted] = useState(true);
 
     useEffect(() => {
         const localAccepted = localStorage.getItem('cookiesAccepted');
-        if(localAccepted==='true') setAccepted(true);
+        if(localAccepted==='false') setAccepted(false);
     }, [])
     const acceptCookie = () => {
-        localStorage.setItem('cookiesAccepted', "true");
-        setAccepted(true)
+        localStorage.setItem('cookiesAccepted', "false");
+        setAccepted(false)
     }
 
 

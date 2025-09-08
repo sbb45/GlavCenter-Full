@@ -1,11 +1,10 @@
 'use client'
 import styled from "styled-components";
-import {bgColor, blackColor, headingColor} from "@/styles/colors";
+import {bgColor, blackColor, headingColor, primaryColor, textColor, whiteColor} from "@/styles/colors";
 import Link from "next/link";
 
 export const ThanksContent = styled.div`
     margin-top: 100px;
-    background-color: black;
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -77,7 +76,7 @@ export const ThanksLine = styled.hr`
     }
 `
 export const Title = styled.h2`
-    color: ${bgColor};
+    color: ${headingColor};
     font-weight: 700;
     font-size: calc(46px + 6vw);
     line-height: 1;
@@ -102,7 +101,7 @@ export const Description = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: ${bgColor};
+    color: ${textColor};
     gap: 20px;
     
     img {
@@ -193,7 +192,7 @@ export const Description = styled.div`
     }
 `
 export const LinkTelegram = styled(Link)`
-    background-color: #e5d4c2;
+    background-color: ${primaryColor};
     display: flex;
     justify-content: center;
     align-items: center;
@@ -211,7 +210,7 @@ export const LinkTelegram = styled(Link)`
     }
     
     p{
-        color: black;
+        color: ${whiteColor};
         font-weight: 500;
         font-size: calc(12px + .3vw);
         margin: 0;
