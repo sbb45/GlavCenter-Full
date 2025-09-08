@@ -14,7 +14,7 @@ async function getBaseUrl() {
 
 async function fetchPost(slug: string) {
     const baseUrl = await getBaseUrl();
-    const url = baseUrl ? `${baseUrl}/api/posts/get-one?id=${slug}` : `/api/posts/get-one?id=${slug}`;
+    const url = baseUrl ? `${baseUrl}/api/posts/get-one?slug=${slug}` : `/api/posts/get-one?slug=${slug}`;
     const res = await fetch(url, { cache: 'no-store' });
     if (!res.ok) return null;
                 const data = await res.json();
@@ -72,7 +72,7 @@ export default async function Page({ params }: { params: Params }) {
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
             )}
-            <ClientPost id={params.slug} />
+            <ClientPost slug={params.slug} />
         </>
     );
 }

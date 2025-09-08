@@ -70,15 +70,20 @@ const Modal = () => {
     useEffect(() => {
         let timer: NodeJS.Timeout | undefined;
         if (isOpen) {
-            setIsLoading(true);
-            let rand = Math.floor(Math.random() * (9 - 5 + 1)) + 5;
-            timer = setTimeout(() => setIsLoading(false), Math.floor(rand) * 1000);
+            const noLoading = (modalContent as any)?.props?.['data-no-loading'];
+            if (noLoading) {
+                setIsLoading(false);
+            } else {
+                setIsLoading(true);
+                let rand = Math.floor(Math.random() * (9 - 5 + 1)) + 5;
+                timer = setTimeout(() => setIsLoading(false), Math.floor(rand) * 1000);
+            }
         }
 
         return () => {
             if (timer) clearTimeout(timer);
         };
-    }, [isOpen]);
+    }, [isOpen, modalContent]);
 
     if (!isOpen) return null;
     if (isLoading) return (

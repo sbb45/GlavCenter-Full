@@ -110,6 +110,62 @@ export const lists: Lists = {
         },
         fields: {
             title: text({ validation: { isRequired: true }, label: 'Заголовок' }),
+            slug: text({
+                isIndexed: 'unique',
+                label: 'Слаг',
+                ui: {
+                    createView: { fieldMode: 'hidden' },
+                    itemView: { fieldMode: 'read' },
+                },
+                access: {
+                    update: () => false, // запрет ручного редактирования слага
+                },
+                hooks: {
+                    resolveInput: async ({ resolvedData, item, context }) => {
+                        // Всегда генерируем слаг из заголовка; игнорируем пользовательский ввод
+                        const baseTitle = (resolvedData.title ?? item?.title ?? '').toString().trim()
+
+                        const transliterate = (input: string) => {
+                            if (!input) return ''
+                            const map: Record<string, string> = {
+                                а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ё: 'e', ж: 'zh', з: 'z', и: 'i', й: 'y',
+                                к: 'k', л: 'l', м: 'm', н: 'n', о: 'o', п: 'p', р: 'r', с: 's', т: 't', у: 'u', ф: 'f',
+                                х: 'h', ц: 'c', ч: 'ch', ш: 'sh', щ: 'sch', ъ: '', ы: 'y', ь: '', э: 'e', ю: 'yu', я: 'ya',
+                                А: 'a', Б: 'b', В: 'v', Г: 'g', Д: 'd', Е: 'e', Ё: 'e', Ж: 'zh', З: 'z', И: 'i', Й: 'y',
+                                К: 'k', Л: 'l', М: 'm', Н: 'n', О: 'o', П: 'p', Р: 'r', С: 's', Т: 't', У: 'u', Ф: 'f',
+                                Х: 'h', Ц: 'c', Ч: 'ch', Ш: 'sh', Щ: 'sch', Ъ: '', Ы: 'y', Ь: '', Э: 'e', Ю: 'yu', Я: 'ya',
+                            }
+                            const transliterated = input
+                                .split('')
+                                .map(ch => (map[ch] !== undefined ? map[ch] : ch))
+                                .join('')
+                                .toLowerCase()
+                            return transliterated
+                                .replace(/[^a-z0-9\s-]/g, '')
+                                .trim()
+                                .replace(/\s+/g, '-')
+                                .replace(/-+/g, '-')
+                                .replace(/^-|-$/g, '')
+                        }
+
+                        let baseSlug = transliterate(baseTitle)
+                        if (!baseSlug) return item?.slug ?? ''
+
+                        // Ensure uniqueness by appending -n if needed
+                        let uniqueSlug = baseSlug
+                        let counter = 1
+                        const currentId = item?.id
+                        // eslint-disable-next-line no-constant-condition
+                        while (true) {
+                            const existing: any = await context.db.Post.findOne({ where: { slug: uniqueSlug } as any })
+                            if (!existing || (currentId && existing.id === currentId)) break
+                            counter += 1
+                            uniqueSlug = `${baseSlug}-${counter}`
+                        }
+                        return uniqueSlug
+                    }
+                }
+            }),
             description: text({ label: 'Описание' }),
             content: document({
                 formatting: true,
@@ -122,6 +178,18 @@ export const lists: Lists = {
                 ],
                 links: true,
                 dividers: true,
+                relationships: {
+                    image: {
+                        listKey: 'PostImage',
+                        selection: 'id image { url } alt caption',
+                        label: 'Изображение',
+                    },
+                    cta: {
+                        listKey: 'PostAction',
+                        selection: 'id key label',
+                        label: 'Кнопка (CTA)',
+                    },
+                },
                 label: 'Контент',
             }),
             categories: json({
@@ -248,6 +316,63 @@ export const lists: Lists = {
                 links: true,
                 dividers: true,
                 label: 'Контент',
+            }),
+            createdAt: timestamp({ defaultValue: { kind: 'now' }, label: 'Создано' }),
+        },
+    }),
+
+    PostImage: list({
+        access: {
+            operation: {
+                query: allowAll,
+                create: ({ session }) => !!session,
+                update: ({ session }) => !!session,
+                delete: ({ session }) => !!session,
+            },
+        },
+        ui: {
+            labelField: 'alt',
+            description: 'Изображения для вставки в статьи',
+            listView: {
+                initialColumns: ['image', 'alt', 'caption', 'createdAt'],
+                initialSort: { field: 'createdAt', direction: 'DESC' },
+            },
+        },
+        fields: {
+            image: image({ storage: 'my_local_images', label: 'Файл изображения' }),
+            alt: text({ validation: { isRequired: true }, label: 'Alt текст' }),
+            caption: text({ label: 'Подпись' }),
+            createdAt: timestamp({ defaultValue: { kind: 'now' }, label: 'Создано' }),
+        },
+    }),
+
+    PostAction: list({
+        access: {
+            operation: {
+                query: allowAll,
+                create: ({ session }) => !!session,
+                update: ({ session }) => !!session,
+                delete: ({ session }) => !!session,
+            },
+        },
+        ui: {
+            labelField: 'label',
+            description: 'CTA элементы для вставки в текст',
+            listView: {
+                initialColumns: ['label', 'key', 'createdAt'],
+                initialSort: { field: 'createdAt', direction: 'DESC' },
+            },
+        },
+        fields: {
+            label: text({
+                defaultValue: 'Узнать, можно ли списать долги',
+                validation: { isRequired: true },
+                label: 'Текст кнопки',
+            }),
+            key: text({
+                validation: { isRequired: true },
+                isIndexed: 'unique',
+                label: 'Ключ действия (actionKey)',
             }),
             createdAt: timestamp({ defaultValue: { kind: 'now' }, label: 'Создано' }),
         },

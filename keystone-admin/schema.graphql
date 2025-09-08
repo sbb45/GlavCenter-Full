@@ -243,6 +243,7 @@ input ClientCreateInput {
 type Post {
   id: ID!
   title: String
+  slug: String
   description: String
   content: Post_content_Document
   categories: JSON
@@ -258,6 +259,7 @@ type Post_content_Document {
 
 input PostWhereUniqueInput {
   id: ID
+  slug: String
 }
 
 input PostWhereInput {
@@ -266,6 +268,7 @@ input PostWhereInput {
   NOT: [PostWhereInput!]
   id: IDFilter
   title: StringFilter
+  slug: StringFilter
   description: StringFilter
   views: IntNullableFilter
   author: UserWhereInput
@@ -275,6 +278,7 @@ input PostWhereInput {
 input PostOrderByInput {
   id: OrderDirection
   title: OrderDirection
+  slug: OrderDirection
   description: OrderDirection
   views: OrderDirection
   createdAt: OrderDirection
@@ -282,6 +286,7 @@ input PostOrderByInput {
 
 input PostUpdateInput {
   title: String
+  slug: String
   description: String
   content: JSON
   categories: JSON
@@ -304,6 +309,7 @@ input PostUpdateArgs {
 
 input PostCreateInput {
   title: String
+  slug: String
   description: String
   content: JSON
   categories: JSON
@@ -506,6 +512,100 @@ input ServiceCreateInput {
   createdAt: DateTime
 }
 
+type PostImage {
+  id: ID!
+  image: ImageFieldOutput
+  alt: String
+  caption: String
+  createdAt: DateTime
+}
+
+input PostImageWhereUniqueInput {
+  id: ID
+}
+
+input PostImageWhereInput {
+  AND: [PostImageWhereInput!]
+  OR: [PostImageWhereInput!]
+  NOT: [PostImageWhereInput!]
+  id: IDFilter
+  alt: StringFilter
+  caption: StringFilter
+  createdAt: DateTimeNullableFilter
+}
+
+input PostImageOrderByInput {
+  id: OrderDirection
+  alt: OrderDirection
+  caption: OrderDirection
+  createdAt: OrderDirection
+}
+
+input PostImageUpdateInput {
+  image: ImageFieldInput
+  alt: String
+  caption: String
+  createdAt: DateTime
+}
+
+input PostImageUpdateArgs {
+  where: PostImageWhereUniqueInput!
+  data: PostImageUpdateInput!
+}
+
+input PostImageCreateInput {
+  image: ImageFieldInput
+  alt: String
+  caption: String
+  createdAt: DateTime
+}
+
+type PostAction {
+  id: ID!
+  label: String
+  key: String
+  createdAt: DateTime
+}
+
+input PostActionWhereUniqueInput {
+  id: ID
+  key: String
+}
+
+input PostActionWhereInput {
+  AND: [PostActionWhereInput!]
+  OR: [PostActionWhereInput!]
+  NOT: [PostActionWhereInput!]
+  id: IDFilter
+  label: StringFilter
+  key: StringFilter
+  createdAt: DateTimeNullableFilter
+}
+
+input PostActionOrderByInput {
+  id: OrderDirection
+  label: OrderDirection
+  key: OrderDirection
+  createdAt: OrderDirection
+}
+
+input PostActionUpdateInput {
+  label: String
+  key: String
+  createdAt: DateTime
+}
+
+input PostActionUpdateArgs {
+  where: PostActionWhereUniqueInput!
+  data: PostActionUpdateInput!
+}
+
+input PostActionCreateInput {
+  label: String
+  key: String
+  createdAt: DateTime
+}
+
 type Calculator {
   id: ID!
   title: String
@@ -677,6 +777,18 @@ type Mutation {
   updateServices(data: [ServiceUpdateArgs!]!): [Service]
   deleteService(where: ServiceWhereUniqueInput!): Service
   deleteServices(where: [ServiceWhereUniqueInput!]!): [Service]
+  createPostImage(data: PostImageCreateInput!): PostImage
+  createPostImages(data: [PostImageCreateInput!]!): [PostImage]
+  updatePostImage(where: PostImageWhereUniqueInput!, data: PostImageUpdateInput!): PostImage
+  updatePostImages(data: [PostImageUpdateArgs!]!): [PostImage]
+  deletePostImage(where: PostImageWhereUniqueInput!): PostImage
+  deletePostImages(where: [PostImageWhereUniqueInput!]!): [PostImage]
+  createPostAction(data: PostActionCreateInput!): PostAction
+  createPostActions(data: [PostActionCreateInput!]!): [PostAction]
+  updatePostAction(where: PostActionWhereUniqueInput!, data: PostActionUpdateInput!): PostAction
+  updatePostActions(data: [PostActionUpdateArgs!]!): [PostAction]
+  deletePostAction(where: PostActionWhereUniqueInput!): PostAction
+  deletePostActions(where: [PostActionWhereUniqueInput!]!): [PostAction]
   createCalculator(data: CalculatorCreateInput!): Calculator
   createCalculators(data: [CalculatorCreateInput!]!): [Calculator]
   updateCalculator(where: CalculatorWhereUniqueInput!, data: CalculatorUpdateInput!): Calculator
@@ -727,6 +839,12 @@ type Query {
   service(where: ServiceWhereUniqueInput!): Service
   services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
   servicesCount(where: ServiceWhereInput! = {}): Int
+  postImage(where: PostImageWhereUniqueInput!): PostImage
+  postImages(where: PostImageWhereInput! = {}, orderBy: [PostImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostImageWhereUniqueInput): [PostImage!]
+  postImagesCount(where: PostImageWhereInput! = {}): Int
+  postAction(where: PostActionWhereUniqueInput!): PostAction
+  postActions(where: PostActionWhereInput! = {}, orderBy: [PostActionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostActionWhereUniqueInput): [PostAction!]
+  postActionsCount(where: PostActionWhereInput! = {}): Int
   calculator(where: CalculatorWhereUniqueInput!): Calculator
   calculators(where: CalculatorWhereInput! = {}, orderBy: [CalculatorOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CalculatorWhereUniqueInput): [Calculator!]
   calculatorsCount(where: CalculatorWhereInput! = {}): Int

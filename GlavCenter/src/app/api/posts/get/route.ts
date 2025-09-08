@@ -7,6 +7,7 @@ export async function GET() {
           query GetPosts {
             posts {
               id
+              slug
               title
               description
               image {

@@ -34,7 +34,7 @@ interface PostType {
     content?: { document: any };
 }
 
-export default function ClientPost({ id }: { id: string }) {
+export default function ClientPost({ slug }: { slug: string }) {
     const [post, setPost] = useState<PostType | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -88,7 +88,7 @@ export default function ClientPost({ id }: { id: string }) {
             try {
                 setLoading(true);
                 setError(null);
-                const res = await fetch(`/api/posts/get-one?id=${id}`);
+                const res = await fetch(`/api/posts/get-one?slug=${slug}`);
                 if (!res.ok) {
                     throw new Error('Failed to fetch post');
                 }
@@ -102,10 +102,10 @@ export default function ClientPost({ id }: { id: string }) {
             }
         };
 
-        if (id) {
+        if (slug) {
             fetchPost();
         }
-    }, [id]);
+    }, [slug]);
 
     const handleBack = () => {
         router.push('/blog');

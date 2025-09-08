@@ -1,6 +1,6 @@
 import React, {FormEvent, useState} from 'react';
 import styled from "styled-components";
-import {headingColor, whiteColor} from "@/styles/colors";
+import {blackColor, headingColor, whiteColor} from "@/styles/colors";
 import {useModal} from "@/providers/ModalProvider";
 import RadioButtons from "@/components/main/calculator/RadioButtons";
 import PriceRange from "@/components/main/calculator/PriceRange";
@@ -8,6 +8,7 @@ import CheckboxBtn from "@/components/main/calculator/CheckboxBtn";
 import SubmitBtn from "@/components/other/SubmitBtn";
 import ModalCalculator from "@/components/main/calculator/ModalCalculator";
 import {useCalculatorConfig} from "@/hooks/useCalculatorConfig";
+import Link from "next/link";
 
 const WrapperCalculator = styled.form`
     display: flex;
@@ -43,8 +44,16 @@ export const QuestionTitle = styled.h3`
         color: red;
     }
 `
+export const PolicyConf = styled.p`
+    font-size: calc(8px + .3vw);
+    max-width: 560px;
+    a{
+        text-decoration: underline;
+        color: ${blackColor}
+    }
+`
 
-const Calculator = () => {
+const Calculator = ({blogCalculator}: {blogCalculator: boolean}) => {
     const [overdue, setOverdue] = useState('');
     const [debt, setDebt] = useState(0);
     const [payment, setPayment] = useState(0);
@@ -64,7 +73,7 @@ const Calculator = () => {
         if (overdue==='') emptyFields.push('overdue');
         if (debt===0) emptyFields.push('debt');
         if (payment===0) emptyFields.push('payment');
-        if (whoOwes.length===0) emptyFields.push('whoOwes')
+        if (whoOwes.length===0 && !blogCalculator) emptyFields.push('whoOwes')
         if (emptyFields.length > 0){
             console.log(errors)
             setErrors(emptyFields)
@@ -103,15 +112,21 @@ const Calculator = () => {
                 value={payment}
                 setValue={setPayment}
             />
-            <div className={'blockWrapper'}>
-                <QuestionTitle className={errors.includes('whoOwes') ? 'err' : ''}>{config.whoOwesTitle}</QuestionTitle>
-                <CheckboxBtn
-                    value={whoOwes}
-                    setValue={setWhoOwes}
-                    options={config.whoOwesOptions}
-                />
-            </div>
-            <SubmitBtn value={config.submitButtonText} />
+            {!blogCalculator &&
+                <div className={'blockWrapper'}>
+                    <QuestionTitle className={errors.includes('whoOwes') ? 'err' : ''}>{config.whoOwesTitle}</QuestionTitle>
+                    <CheckboxBtn
+                        value={whoOwes}
+                        setValue={setWhoOwes}
+                        options={config.whoOwesOptions}
+                    />
+                </div>
+            }
+            <SubmitBtn value={blogCalculator ? 'Получить план' : config.submitButtonText} />
+            {blogCalculator && (
+                <PolicyConf>Отправляя формы на данном сайте, вы даете согласие на <Link href={'https://docs.google.com/document/u/0/d/1fmczwk_G4J-nUB6SjF5SQCzy2Kcb68Hvb43EjF2hE_Y/edit?tab=t.0&pli=1&authuser=0#heading=h.445wxmcfzj8q'}>обработку персональных данных</Link> в соответствии с ФЗ-152 «О персональных данных»<br/>
+                    * Оказываем услуги по сопровождению процедуры банкротства в рамках Федерального закона № 127-ФЗ</PolicyConf>
+            )}
         </WrapperCalculator>
     );
 };

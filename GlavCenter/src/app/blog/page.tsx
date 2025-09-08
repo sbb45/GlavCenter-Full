@@ -6,6 +6,7 @@ import {useEffect, useState} from "react";
 
 interface PostType {
     id: string;
+    slug: string;
     title: string;
     description: string;
     image?: {
@@ -48,7 +49,7 @@ export default function Blog() {
                     ): (
                         <BlogWrapper>
                             {posts.map((post)=>(
-                                <Post href={`/blog/${post.id}`} key={post.id}>
+                                <Post href={`/blog/${post.slug}`} key={post.id}>
                                     <Image
                                         src={post.image ? `http://localhost:4000${post?.image?.url}` : ''}
                                         alt={'Post Image'}

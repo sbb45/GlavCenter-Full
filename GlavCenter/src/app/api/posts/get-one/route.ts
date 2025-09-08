@@ -3,20 +3,21 @@ import {NextResponse, NextRequest} from "next/server";
 
 export async function GET(req: NextRequest) {
     try {
-        const id = req.nextUrl.searchParams.get('id');
-        if (!id) return NextResponse.json({ error: 'Id is required' }, { status: 400 });
+        const slug = req.nextUrl.searchParams.get('slug');
+        if (!slug) return NextResponse.json({ error: 'Slug is required' }, { status: 400 });
 
         const endpoint = 'http://localhost:4000/admin/api/graphql';
 
-        // 1. Получаем пост
+        // 1. Получаем пост по слагу
         const getPostQuery = gql`
-      query GetPost($id: ID!) {
-        post(where: { id: $id }) {
+      query GetPost($slug: String!) {
+        post(where: { slug: $slug }) {
           id
+          slug
           title
           description
           image { id url }
-          content { document }
+          content { document(hydrateRelationships: true) }
           author { image { url } name }
           views
           categories
@@ -24,7 +25,7 @@ export async function GET(req: NextRequest) {
         }
       }
     `;
-        const { post } = await request(endpoint, getPostQuery, { id }) as any;
+        const { post } = await request(endpoint, getPostQuery, { slug }) as any;
         console.log(post);
 
         if (!post) {
@@ -41,7 +42,7 @@ export async function GET(req: NextRequest) {
           }
         `;
         const newViews = post.views + 1;
-        await request(endpoint, updateViewsMutation, { id, views: newViews });
+        await request(endpoint, updateViewsMutation, { id: post.id, views: newViews });
 
         // 3. Возвращаем пост с обновлёнными views
         return NextResponse.json({ post: { ...post, views: newViews } });

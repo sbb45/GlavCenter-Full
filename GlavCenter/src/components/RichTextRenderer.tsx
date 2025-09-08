@@ -1,6 +1,9 @@
 'use client'
 import React from 'react';
 import styled from 'styled-components';
+import {primaryColor, primaryHoverColor} from "@/styles/colors";
+import {useModal} from "@/providers/ModalProvider";
+import BlogModal from "@/components/main/calculator/BlogModal";
 
 interface RichTextNode {
   type: string;
@@ -12,6 +15,8 @@ interface RichTextNode {
   italic?: boolean;
   underline?: boolean;
   href?: string;
+  relationship?: string;
+  data?: any;
   [key: string]: any;
 }
 
@@ -207,7 +212,21 @@ const StyledOrderedList = styled.ol`
   }
 `;
 
+const CtaButton = styled.button`
+  background-color: ${primaryColor};
+  color: white;
+  border: none;
+  border-radius: 24px;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color .2s ease;
+  &:hover { background-color: ${primaryHoverColor}; }
+`;
+
 const RichTextRenderer: React.FC<RichTextRendererProps> = ({ document }) => {
+  const { openModal } = useModal();
   // Проверяем, что document существует и является массивом
   if (!document || !Array.isArray(document)) {
     return null;
@@ -240,11 +259,7 @@ const RichTextRenderer: React.FC<RichTextRendererProps> = ({ document }) => {
       return text;
     }
 
-    if (!node.children) {
-      return null;
-    }
-
-    const children = node.children.map((child, childIndex) => 
+    const children = (node.children || []).map((child, childIndex) => 
       renderNode(child, childIndex)
     );
 
@@ -337,6 +352,86 @@ const RichTextRenderer: React.FC<RichTextRendererProps> = ({ document }) => {
             {children}
           </a>
         );
+      
+      case 'relationship': {
+        // Keystone document relationship node
+        // For our config, relationship key is 'image' pointing to PostImage
+        if (node.relationship === 'image') {
+          const rel = node.data || {};
+          // Support several shapes just in case
+          const imageField = rel?.image || rel?.data?.image || rel?.file || rel?.data?.file;
+          const rawUrl: string | undefined = imageField?.url || imageField?.publicUrl || imageField?.publicUrlTransformed;
+          const isAbsolute = !!rawUrl && /^(http|https):\/\//i.test(rawUrl);
+          const fileUrl = rawUrl ? (isAbsolute ? rawUrl : `http://localhost:4000${rawUrl}`) : '';
+          const alt = rel?.alt || rel?.data?.alt || '';
+          const caption = rel?.caption || rel?.data?.caption || '';
+          if (!fileUrl) return null;
+          return (
+            <figure key={index} style={{ margin: '1.5rem 0', textAlign: 'center' }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={fileUrl} alt={alt} style={{ maxWidth: '100%', height: 'auto', borderRadius: 8 }} />
+              {caption && (
+                <figcaption style={{ color: '#6b7280', fontSize: '0.9rem', marginTop: '0.5rem' }}>
+                  {caption}
+                </figcaption>
+              )}
+            </figure>
+          );
+        }
+        if (node.relationship === 'cta') {
+          const rel = node.data || {};
+          const label = rel?.label || 'Узнать, можно ли списать долги';
+          const actionKey = rel?.key || 'cta_default';
+          return (
+            <div key={index} style={{ display: 'flex', justifyContent: 'center', margin: '1.5rem 0' }}>
+              <CtaButton
+                type="button"
+                data-action-key={actionKey}
+                onClick={() => {
+                  // Попробуем пользовательский обработчик, если есть
+                  if (typeof window !== 'undefined') {
+                    const anyWin: any = window as any;
+                    if (typeof anyWin.handlePostAction === 'function') {
+                      anyWin.handlePostAction(actionKey);
+                      return;
+                    }
+                  }
+
+                  openModal(
+                    <div data-no-loading>
+                      <BlogModal />
+                    </div>
+                  );
+                }}
+              >
+                {label}
+              </CtaButton>
+            </div>
+          );
+        }
+        return <div key={index}>{children}</div>;
+      }
+
+      case 'image': {
+        // Basic image node support (e.g., when editor inserts plain image blocks)
+        const rawUrl: string | undefined = (node as any).src || (node as any).url || (node as any).data?.src || (node as any).data?.url;
+        const isAbsolute = !!rawUrl && /^(http|https):\/\//i.test(rawUrl);
+        const fileUrl = rawUrl ? (isAbsolute ? rawUrl : `http://localhost:4000${rawUrl}`) : '';
+        const alt = (node as any).alt || (node as any).title || '';
+        const caption = (node as any).caption || (node as any).data?.caption || '';
+        if (!fileUrl) return null;
+        return (
+          <figure key={index} style={{ margin: '1.5rem 0', textAlign: 'center' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={fileUrl} alt={alt} style={{ maxWidth: '100%', height: 'auto', borderRadius: 8 }} />
+            {caption && (
+              <figcaption style={{ color: '#6b7280', fontSize: '0.9rem', marginTop: '0.5rem' }}>
+                {caption}
+              </figcaption>
+            )}
+          </figure>
+        );
+      }
       
       default:
         return <div key={index}>{children}</div>;

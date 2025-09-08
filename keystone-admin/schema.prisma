@@ -40,6 +40,7 @@ model Client {
 model Post {
   id              String    @id @default(cuid())
   title           String    @default("")
+  slug            String    @unique @default("")
   description     String    @default("")
   content         String    @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
   categories      String?   @default("[\"Пример 1\",\"Пример 2\"]")
@@ -86,6 +87,25 @@ model Service {
   id        String    @id @default(cuid())
   title     String    @default("")
   content   String    @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  createdAt DateTime? @default(now())
+}
+
+model PostImage {
+  id              String    @id @default(cuid())
+  image_id        String?
+  image_filesize  Int?
+  image_width     Int?
+  image_height    Int?
+  image_extension String?
+  alt             String    @default("")
+  caption         String    @default("")
+  createdAt       DateTime? @default(now())
+}
+
+model PostAction {
+  id        String    @id @default(cuid())
+  label     String    @default("Узнать, можно ли списать долги")
+  key       String    @unique @default("")
   createdAt DateTime? @default(now())
 }
 
