@@ -11,12 +11,12 @@ export const ThanksContent = styled.div`
     align-items: center;
     flex-direction: column;
     padding: 20px;
-    
+
     @media (max-width: 768px) {
         padding: 15px;
         min-height: 100vh;
     }
-    
+
     @media (max-width: 480px) {
         padding: 10px;
     }
@@ -203,40 +203,40 @@ export const LinkTelegram = styled(Link)`
     margin: 24px auto 0;
     text-decoration: none;
     transition: all 0.3s ease;
-    
+
     &:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(229, 212, 194, 0.3);
     }
-    
+
     p{
         color: ${whiteColor};
         font-weight: 500;
         font-size: calc(12px + .3vw);
         margin: 0;
     }
-    
+
     @media (max-width: 1024px) {
         padding: 10px 20px;
         gap: 10px;
-        
+
         p {
             font-size: calc(11px + .2vw);
         }
     }
-    
+
     @media (max-width: 768px) {
         width: 100%;
         max-width: 400px;
         padding: 12px 24px;
         margin: 20px auto 0;
-        
+
         p {
             font-size: calc(10px + .8vw);
             text-align: center;
         }
     }
-    
+
     @media (max-width: 480px) {
         padding: 10px 24px;
         margin: 15px auto 0;

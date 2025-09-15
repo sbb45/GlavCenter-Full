@@ -1,8 +1,4 @@
 import { IndexWrapper } from "@/app/page.styled";
-import { ServicesContent, ServiceWrapper } from "@/app/services/page.styled";
-import RichTextRenderer from "@/components/RichTextRenderer";
-import { fetchKeystoneSafe } from "@/lib/keystone";
-import { DEFAULT_SERVICES } from "@/lib/defaultData";
 import {
     ContentWrapper,
     Description,
