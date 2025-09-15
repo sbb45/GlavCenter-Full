@@ -151,10 +151,12 @@ export default function ClientPost({ slug }: { slug: string }) {
             <BlogHeader>
                 {post.author && (
                     <Author>
+                        <div className="avatar">
                         <Image
                             src={post.author.image ? `http://localhost:4000${post.author.image.url}` : '/icons/avatar.jpg'}
                             alt={'author'} width={64} height={64}
                         />
+                        </div>
                         <p>{post.author.name}</p>
                     </Author>
                 )}

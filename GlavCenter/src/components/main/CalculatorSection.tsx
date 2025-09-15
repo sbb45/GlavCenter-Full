@@ -110,7 +110,7 @@ const CalculatorSection = () => {
                 <h3>Узнайте подходите ли Вы под процедуру списания по 127-Ф3?</h3>
                 <p>Заполните калькулятор и узнайте результат за 5 секунд!</p>
             </TextCalculator>
-            <Calculator />
+            <Calculator blogCalculator={false} />
         </WrapperCalculator>
     );
 };

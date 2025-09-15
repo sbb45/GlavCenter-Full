@@ -122,7 +122,7 @@ const Calculator = ({blogCalculator}: {blogCalculator: boolean}) => {
                     />
                 </div>
             }
-            <SubmitBtn value={blogCalculator ? 'Получить план' : config.submitButtonText} />
+            <SubmitBtn value={blogCalculator ? 'Узнать, можно ли списать долги' : config.submitButtonText} />
             {blogCalculator && (
                 <PolicyConf>Отправляя формы на данном сайте, вы даете согласие на <Link href={'https://docs.google.com/document/u/0/d/1fmczwk_G4J-nUB6SjF5SQCzy2Kcb68Hvb43EjF2hE_Y/edit?tab=t.0&pli=1&authuser=0#heading=h.445wxmcfzj8q'}>обработку персональных данных</Link> в соответствии с ФЗ-152 «О персональных данных»<br/>
                     * Оказываем услуги по сопровождению процедуры банкротства в рамках Федерального закона № 127-ФЗ</PolicyConf>

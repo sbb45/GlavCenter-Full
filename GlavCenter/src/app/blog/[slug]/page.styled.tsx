@@ -54,9 +54,23 @@ export const Author = styled.div`
     display: flex;
     justify-content: start;
     align-items: center;
+    flex-direction: column;
     gap: 12px;
-    img{
+    .avatar {
+        width: 64px;       
+        height: 64px;     
         border-radius: 50%;
+        overflow: hidden;
+        flex-shrink: 0;     
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+            object-fit: cover; 
+            width: 100%;
+            height: 100%;
+        }
     }
     p{
         font-size: calc(14px + .4vw);
@@ -80,6 +94,7 @@ export const InfoPost = styled.div`
     flex-direction: column;
     gap: 12px;
     h4{
+        text-align:end;
         font-size: calc(10px + .4vw);
         color: ${textGrayColor};
     }
